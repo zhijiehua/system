@@ -1,0 +1,45 @@
+.scrollTable {
+  flex: 1;
+  overflow: hidden;
+  .ant-spin-nested-loading {
+    height: 100%;
+    .ant-spin-container {
+      height: 100%;
+      .ant-table {
+        height: 100%;
+        .ant-table-container {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          .ant-table-body {
+            flex: 1;
+            overflow: auto;
+            table {
+              // height: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.beauti-title {
+  color: #333;
+  font-weight: bold;
+  height: 32px;
+  font-size: 16px;
+  line-height: 32px;
+  display: flex;
+  margin-bottom: 20px;
+  img {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+  }
+  span {
+    line-height: 32px;
+    display: block;
+    height: 32px;
+  }
+}

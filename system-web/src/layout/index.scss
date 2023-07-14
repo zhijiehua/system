@@ -1,0 +1,96 @@
+.pageBox {
+  overflow: hidden;
+  // 头部
+  .layoutHeader {
+    height: 72px;
+    background: url('@/assets/images/layout/topbg.png');
+    border: 1px solid #0B2D84;
+    padding: 0 15px;
+    display: flex;
+    justify-content: space-between;
+    .headerLeft {
+      margin-top: 7px;
+      width: 540px;
+      height: 58px;
+      background: url('@/assets/images/layout/logo.png');
+    }
+    .headerRight {
+      font-size: 14px;
+      font-family: PingFang SC;
+      font-weight: 500;
+      color: #FFFFFF;
+      line-height: 70px;
+      margin-right: 16px;
+      display: flex;
+      .icon {
+        margin: 28px 7px 0 0;
+      }
+      &::before {
+        display: block;
+        content: ' ';
+        background-image: url('@/assets/images/layout/police.png');
+        background-size: 100% 100%;
+        width: 36px;
+        height: 36px;
+        margin: 17px 13px 0 0;
+      }
+    }
+  }
+  // 导航栏
+  .navigation {
+    background: #0B2D84;
+    width: 244px;
+    padding: 0 9px 0 8px;
+    .ant-menu {
+      background: inherit;
+    }
+    .ant-menu-item {
+      font-size: 14px;
+      font-weight: 400;
+      color: #C3D8FA;
+      line-height: 60px;
+      background: inherit;
+      &::after {
+        display: none;
+      }
+    }
+    .ant-menu-submenu-title {
+      width: 227px;
+      height: 54px;
+      border-radius: 6px;
+      color: #C3D8FA;
+      .ant-menu-submenu-arrow {
+        color: #C3D8FA;
+      }
+    }
+  }
+  .ant-menu-submenu-selected, .ant-menu-submenu:hover {
+    .ant-menu-submenu-title {
+      background: #0090FF;
+      border-radius: 6px;
+      color: #FFFFFF;
+      .ant-menu-submenu-arrow {
+        color: #fff;
+      }
+    }
+    .ant-menu-item-selected, .ant-menu-item:hover {
+      color: #fff;
+    }
+  }
+  .rightSec {
+    padding: 0 10px 10px 10px;
+    overflow: hidden;
+    .Breadcrumb {
+      margin: 10px 0;
+    }
+    .pageContent {
+      padding: 20px;
+      margin: 0;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      border-radius: 10px;
+      background: #fff;
+    }
+  }
+}
