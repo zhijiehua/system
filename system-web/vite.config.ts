@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: huazj
  * @Date: 2023-03-25 22:06:36
- * @LastEditTime: 2023-04-12 12:46:48
+ * @LastEditTime: 2023-07-16 15:51:34
  * @LastEditors: huazj
  */
 import { defineConfig } from 'vite'
@@ -41,7 +41,7 @@ export default defineConfig({
     //反向代理配置，注意rewrite写法，开始没看文档在这里踩了坑
     proxy: {
       '^/api/': {
-        target: 'http://172.16.0.2:10006/api/',   //代理接口
+        target: 'http://localhost:3000/api',   //代理接口
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }

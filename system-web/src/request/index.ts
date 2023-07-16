@@ -2,7 +2,7 @@
  * @Description: 请求封装
  * @Author: huazj
  * @Date: 2023-04-02 16:10:22
- * @LastEditTime: 2023-04-12 15:57:57
+ * @LastEditTime: 2023-07-16 15:55:29
  * @LastEditors: huazj
  */
 import type {AxiosRequestConfig } from "axios";
@@ -15,7 +15,7 @@ import { changeURLArg } from "@/utils/common";
  * @param {Object} params [请求时携带的参数]
  * @param {String} dataFormat [内容请求类型]
  * **/
-type reqFun = (config:AxiosRequestConfig & {dataFormat?: string}, params:{[index:string]: string}|undefined, page:{[index:string]: string}|undefined) => Promise<{code: number, data: any}>
+type reqFun = (config:AxiosRequestConfig & {dataFormat?: string}, params?:any, page?:{[index:string]: number}|undefined) => Promise<{code: number, data: any}>
 const request:reqFun = (config, params = {}, page = {}) => {    // eslint-disable-line no-unused-vars
   return new Promise(async (resolve, reject) => {
     try {
@@ -64,11 +64,11 @@ const request:reqFun = (config, params = {}, page = {}) => {    // eslint-disabl
 }
 
 export const postRequest = (config = {}, params = {}, page = {}) => {
-  return request({ ...config, method: 'post' } as AxiosRequestConfig, params = {}, page as {[index:string]: string})
+  return request({ ...config, method: 'post' } as AxiosRequestConfig, params = {}, page )
 }
 
 export const getRequest = (config = {}, params = {}, page = {}) => {
-  return request({ ...config, method: 'get' } as AxiosRequestConfig, params = {}, page as {[index:string]: string})
+  return request({ ...config, method: 'get' } as AxiosRequestConfig, params = {}, page)
 }
 
 export default request

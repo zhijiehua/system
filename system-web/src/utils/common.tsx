@@ -5,7 +5,7 @@ import Cookie from "js-cookie";
  * @Description: 公共方法
  * @Author: huazj
  * @Date: 2023-03-30 22:27:54
- * @LastEditTime: 2023-04-12 15:57:54
+ * @LastEditTime: 2023-07-16 15:55:25
  * @LastEditors: huazj
  */
 
@@ -74,7 +74,7 @@ export const getCookie = (name:string|undefined) => {
 /**
  * @desc URL 尾部 追加 参数
  * **/
-export const changeURLArg = (url:string|undefined = '', query:{[index:string]: string}) => {
+export const changeURLArg = (url:string|undefined = '', query:{[index:string]: number}) => {
   let str:string = url.match('[\?]') ? '&' : '';
   const keys:Array<string> = Object.keys(query);
   keys.forEach(key => {
