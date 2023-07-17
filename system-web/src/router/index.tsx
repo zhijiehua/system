@@ -2,7 +2,7 @@
  * @Description: 路由
  * @Author: huazj
  * @Date: 2023-03-26 10:23:21
- * @LastEditTime: 2023-04-11 19:57:28
+ * @LastEditTime: 2023-07-17 21:35:22
  * @LastEditors: huazj
  */
 
@@ -12,15 +12,20 @@ import PageLayout from '@/layout/index';
 
 import SkeletonPage from '@/views/SkeletonPage';
 const Login = lazy(() => import('@/views/login/index'));
-const Option1 = lazy(() => import('@/views/subnav1/option1'));
-const Option2 = lazy(() => import('@/views/subnav1/option2'));
-const Option3 = lazy(() => import('@/views/subnav1/option3'));
-const Option4 = lazy(() => import('@/views/subnav2/option4'));
-const Option5 = lazy(() => import('@/views/subnav2/option5'));
-const Option6 = lazy(() => import('@/views/subnav2/option6'));
-const Option7 = lazy(() => import('@/views/subnav3/option7'));
-const Option8 = lazy(() => import('@/views/subnav3/option8'));
-const Option9 = lazy(() => import('@/views/subnav3/option9'));
+// const Option1 = lazy(() => import('@/views/subnav1/option1'));
+// const Option2 = lazy(() => import('@/views/subnav1/option2'));
+// const Option3 = lazy(() => import('@/views/subnav1/option3'));
+// const Option4 = lazy(() => import('@/views/subnav2/option4'));
+// const Option5 = lazy(() => import('@/views/subnav2/option5'));
+// const Option6 = lazy(() => import('@/views/subnav2/option6'));
+// const Option7 = lazy(() => import('@/views/subnav3/option7'));
+// const Option8 = lazy(() => import('@/views/subnav3/option8'));
+// const Option9 = lazy(() => import('@/views/subnav3/option9'));
+const MenuManagement = lazy(() => import('@/views/menuManagement'));
+const RoleManagement = lazy(() => import('@/views/roleManagement'));
+const DictManagement = lazy(() => import('@/views/dictManagement'));
+const AccountManagement = lazy(() => import('@/views/accountManagement'));
+const AppManagement = lazy(() => import('@/views/appManagement'));
 const Page404 = lazy(() => import('@/views/404'))
 
 const withLoadingComponent = (comp:JSX.Element) => (
@@ -41,68 +46,32 @@ const routes = [
     element: <Login></Login>
   },
   {
-    path: '/subnav1',
+    path: '/system',
     element: <PageLayout></PageLayout>,
     children: [
       {
-        path: '/subnav1/',
-        element: <Navigate to="/subnav1/option1"></Navigate>
+        path: '/system/',
+        element: <Navigate to="/system/menuManagement"></Navigate>
       },
       {
-        path: '/subnav1/option1',
-        element: withLoadingComponent(<Option1 />)
+        path: '/system/menuManagement',
+        element: withLoadingComponent(<MenuManagement />)
       },
       {
-        path: '/subnav1/option2',
-        element: withLoadingComponent(<Option2 />)
+        path: '/system/roleManagement',
+        element: withLoadingComponent(<RoleManagement />)
       },
       {
-        path: '/subnav1/option3',
-        element: withLoadingComponent(<Option3 />)
-      }
-    ],
-  },
-  {
-    path: '/subnav2',
-    element: <PageLayout></PageLayout>,
-    children: [
-      {
-        path: '/subnav2/',
-        element: <Navigate to="/subnav2/option4"></Navigate>
+        path: '/system/dictManagement',
+        element: withLoadingComponent(<DictManagement />)
       },
       {
-        path: '/subnav2/option4',
-        element: withLoadingComponent(<Option4 />)
+        path: '/system/accountManagement',
+        element: withLoadingComponent(<AccountManagement />)
       },
       {
-        path: '/subnav2/option5',
-        element: withLoadingComponent(<Option5 />)
-      },
-      {
-        path: '/subnav2/option6',
-        element: withLoadingComponent(<Option6 />)
-      },
-    ]
-  },
-  {
-    path: '/subnav3',
-    element: <PageLayout></PageLayout>,
-    children: [
-      {
-        path: '/subnav3/',
-        element: <Navigate to="/subnav3/option7"></Navigate>
-      },
-      {
-        path: '/subnav3/option7',
-        element: withLoadingComponent(<Option7 />)
-      },
-      {
-        path: '/subnav3/option8',
-        element: withLoadingComponent(<Option8 />)
-      },
-      {
-        path: '/subnav3/option9',
-        element: withLoadingComponent(<Option9 />)
+        path: '/system/appManagement',
+        element: withLoadingComponent(<AppManagement />)
       },
     ]
   },
