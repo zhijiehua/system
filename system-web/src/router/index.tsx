@@ -2,7 +2,7 @@
  * @Description: 路由
  * @Author: huazj
  * @Date: 2023-03-26 10:23:21
- * @LastEditTime: 2023-07-17 21:35:22
+ * @LastEditTime: 2023-07-17 21:53:32
  * @LastEditors: huazj
  */
 
@@ -12,15 +12,6 @@ import PageLayout from '@/layout/index';
 
 import SkeletonPage from '@/views/SkeletonPage';
 const Login = lazy(() => import('@/views/login/index'));
-// const Option1 = lazy(() => import('@/views/subnav1/option1'));
-// const Option2 = lazy(() => import('@/views/subnav1/option2'));
-// const Option3 = lazy(() => import('@/views/subnav1/option3'));
-// const Option4 = lazy(() => import('@/views/subnav2/option4'));
-// const Option5 = lazy(() => import('@/views/subnav2/option5'));
-// const Option6 = lazy(() => import('@/views/subnav2/option6'));
-// const Option7 = lazy(() => import('@/views/subnav3/option7'));
-// const Option8 = lazy(() => import('@/views/subnav3/option8'));
-// const Option9 = lazy(() => import('@/views/subnav3/option9'));
 const MenuManagement = lazy(() => import('@/views/menuManagement'));
 const RoleManagement = lazy(() => import('@/views/roleManagement'));
 const DictManagement = lazy(() => import('@/views/dictManagement'));

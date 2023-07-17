@@ -2,7 +2,7 @@
  * @Description: 用户
  * @Author: huazj
  * @Date: 2023-07-02 15:50:58
- * @LastEditTime: 2023-07-17 01:03:03
+ * @LastEditTime: 2023-07-17 22:49:41
  * @LastEditors: huazj
  */
 const Router = require('koa-router');
@@ -15,15 +15,9 @@ router.post('/test', async (ctx, next) => {
   const searchData = await search(params);
   if(searchData.results.length === 0) {
     add(params);
-    ctx.body = {
-      test: '用户',
-      code: 200
-    }
+    
   } else {
-    ctx.body = {
-      test: '用户',
-      code: 400 
-    }
+    ctx.fail('用户编码不能重复')
   }
   
 })
