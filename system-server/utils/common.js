@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: huazj
  * @Date: 2023-07-17 00:59:54
- * @LastEditTime: 2023-07-18 01:16:46
+ * @LastEditTime: 2023-07-18 01:18:26
  * @LastEditors: huazj
  */
 module.exports = {
@@ -11,32 +11,31 @@ module.exports = {
    * @return {*}
    */  
   routerResponse: (option={}) => {
-      return async (ctx,next) =>{
-        ctx.success = (data,message) => {
-          ctx.type = option.type || 'json'
-          ctx.body = 
-          {
-            code : option.successCode || 0,
-            message : message,
-            data : data
-          }
+    return async (ctx,next) =>{
+      ctx.success = (data,message) => {
+        ctx.type = option.type || 'json'
+        ctx.body = 
+        {
+          code : option.successCode || 0,
+          message : message,
+          data : data
         }
-        ctx.fail = (message,code) => {
-          ctx.type = option.type || 'json'
-          ctx.body = {
-            code : code || option.failCode || 99,
-            message : message || option.successmessage || 'fail',
-          }
+      }
+      ctx.fail = (message,code) => {
+        ctx.type = option.type || 'json'
+        ctx.body = {
+          code : code || option.failCode || 99,
+          message : message || option.successmessage || 'fail',
         }
-        try {
-          await next()
-        } catch (error) {
-          ctx.body = {
-            code: 500,
-            message: '服务器内部异常'
-          }
+      }
+      try {
+        await next()
+      } catch (error) {
+        ctx.body = {
+          code: 500,
+          message: '服务器内部异常'
         }
       }
     }
-
+  }
 }

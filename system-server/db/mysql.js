@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: huazj
  * @Date: 2023-07-05 11:43:27
- * @LastEditTime: 2023-07-05 15:10:34
+ * @LastEditTime: 2023-07-18 10:34:35
  * @LastEditors: huazj
  */
 const mysql = require('mysql');
@@ -19,16 +19,16 @@ const query = (sql, values) => {
   return new Promise((resolve, reject) => {
     pool.getConnection((err, connection) => {
       if(err) {
-        reject(err);
         resolve({
-          code: 500
+          code: 500,
+          results: err.sqlMessage
         })
       } else {
         connection.query(sql, values, (err, results) => {
           if(err) {
-            reject(err);
             resolve({
-              code: 400
+              code: 400,
+              results: err.sqlMessage
             })
           } else {
             resolve({

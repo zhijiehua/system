@@ -2,7 +2,7 @@
  * @Description: 角色管理
  * @Author: huazj
  * @Date: 2023-07-18 00:40:31
- * @LastEditTime: 2023-07-18 01:15:45
+ * @LastEditTime: 2023-07-18 10:36:01
  * @LastEditors: huazj
  */
 const db = require('../../db/mysql');
@@ -13,15 +13,7 @@ const serves = {
    * @return {*}
    */  
   search: async (params) => {
-    let data;
-    try {
-      data = await db.query("select * from r1oles11213131", []);
-    } catch (error) {
-      data = {
-        code: 500,
-        results: error.sqlMessage
-      }
-    }
+    let data = await db.query("select * from roles", []);
     return data;
   },
   /**
