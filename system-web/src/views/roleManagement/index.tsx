@@ -2,49 +2,73 @@
  * @Description: 角色管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-18 22:56:14
+ * @LastEditTime: 2023-07-20 16:27:31
  * @LastEditors: huazj
  */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback, useRef} from 'react';
+import { Button, Col, Form, Input, Row, Table } from 'antd';
 
-import { Button, Col, Form, Input, Row, Select, Table, Pagination } from 'antd';
+import type { FormInstance } from 'antd/es/form/Form'; 'antd';
 
-import { tableColumns } from './config';
+import Pagination from '@/components/pagination';
+import EditForm from './EditForm';
+
+import { getTableColumn } from './config';
 import { getRolesList } from '@/api/roles';
 import request from '@/request';
 
+import './index.scss';
+
 const RoleManagement: React.FC =  () => {
-  const [tableData, setTableData] = useState([
-    {roleName: '13', roleDesc: '12', roleCode: '12', number: 10, id: '1'}
-  ]);
   
+  const [tableData, setTableData] = useState([]);
   const [form] = Form.useForm();
   const [pagesInfo, setPagesInfo] = useState({
     current: 1,
     size: 10,
     total: 100
   })
+
+  useEffect(() => {
+    handleSearch();
+  }, [])
+
+  /**
+   * @description: 表格点击事件
+   * @return {*}
+   * @param {string} type
+   * @param {object} data
+   */  
+  const handleTableBtn = (type:string, data:{id:string}) => {
+    switch(type) {
+      case 'delete':
+        break;
+      case 'edit':
+        setEditVisible(true);;
+        setTimeout(() => {
+          console.log(editFormRef.current)
+          editFormRef.current?.setFieldsValue(data);
+        })
+        break;
+    }
+  }
+  const tableColumns = getTableColumn(handleTableBtn);
+
   /**
    * @description: 查询
    * @return {*}
    * @param {any} values
    */  
-  const onFinish = async () => {
+  const handleSearch = useCallback(async () => {
     const {code, data} = await request(getRolesList, {
       current: pagesInfo.current,
       size: pagesInfo.size,
       ...form.getFieldsValue()
-    });
-  };
+    })
+    if(code !== 200) return;
+    setTableData(data);
+  }, [])
 
-  /**
-   * @description: 分页信息改变
-   * @return {*}
-   */  
-  const onChange = (current:number, size:number) => {
-    setPagesInfo({...pagesInfo, ...{current, size}});
-    onFinish();
-  }
   /**
    * @description: 重置
    * @return {*}
@@ -53,18 +77,18 @@ const RoleManagement: React.FC =  () => {
     form.resetFields();
   }
 
+  const editFormRef = useRef<FormInstance>();
+  const [editVisible, setEditVisible] = useState(false);
   /**
    * @description: 新增
    * @return {*}
    */  
   const handleAddBtn = () => {
-    setPagesInfo({...pagesInfo, current: 1})
-    console.log(pagesInfo)
+    setEditVisible(true);;
+    setTimeout(() => {
+      editFormRef.current?.resetFields();
+    })
   }
-
-  useEffect(() => {
-    onFinish();
-  }, [])
   return (
     <div className='roleManagement' style={{display: 'flex', flexDirection: 'column', flex: 1}}>
       {/* 查询表单 */}
@@ -72,7 +96,7 @@ const RoleManagement: React.FC =  () => {
         form={form}
         name="advanced_search"
         className="ant-advanced-search-form"
-        onFinish={onFinish}
+        onFinish={handleSearch}
       >
         <Row gutter={24}>
           <Col span={6}>
@@ -110,11 +134,14 @@ const RoleManagement: React.FC =  () => {
       </div>
       {/* 分页 */}
       <Pagination
-        style={{marginTop: '20px', textAlign: 'center'}}
-        showQuickJumper
-        current={pagesInfo.current}
-        total={pagesInfo.total}
-        onChange={onChange} />
+        pagesInfo={pagesInfo}
+        setPagesInfo={setPagesInfo}
+        handleSearch={handleSearch}/>
+      {/* 编辑框 */}
+      <EditForm
+        editVisible={editVisible}
+        ref={editFormRef}
+        setEditVisible={setEditVisible}/>
     </div>
   )
 }
