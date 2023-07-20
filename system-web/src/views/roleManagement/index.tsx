@@ -2,7 +2,7 @@
  * @Description: 角色管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-20 21:50:19
+ * @LastEditTime: 2023-07-21 00:25:37
  * @LastEditors: huazj
  */
 import React, {useEffect, useState, useCallback, useRef} from 'react';
@@ -11,6 +11,8 @@ import { Button, Col, Form, Input, Row, Table } from 'antd';
 import type { FormInstance } from 'antd/es/form/Form'; 'antd';
 
 import Pagination from '@/components/pagination';
+import ModalConfirm from '@/components/ModalConfirm';
+import Notification from '@/components/Notification';
 import EditForm from './EditForm';
 
 import { getTableColumn } from './config';
@@ -18,6 +20,7 @@ import { getRolesList, deleRoles } from '@/api/roles';
 import request from '@/request';
 
 import './index.scss';
+let deleteId:string;
 
 const RoleManagement: React.FC =  () => {
   
@@ -28,9 +31,21 @@ const RoleManagement: React.FC =  () => {
     size: 10,
     total: 100
   })
+  const [modelContent, setModelContent] = useState('');
+  const [notiMsg, setNotiMsg] = useState<notiMsgType>({type: '', message: ''});
 
   useEffect(() => {
     handleSearch();
+  }, [])
+
+  const deleteFun = useCallback(async (type:string) => {
+    if(type === 'sure') {
+      const {code} = await request(deleRoles, {id: deleteId});
+      if(code !== 200) return;
+      handleSearch();
+      setNotiMsg({type: 'success', message: '操作成功'});
+    }
+    setModelContent('');
   }, [])
 
   /**
@@ -38,10 +53,12 @@ const RoleManagement: React.FC =  () => {
    * @return {*}
    * @param {string} type
    * @param {object} data
-   */  
-  const handleTableBtn = (type:string, data:{id:string}) => {
-    switch(type) {
+   */
+  const handleTableBtn = async (type:string, data:{id:string, roleName:string}) => {
+    switch (type) {
       case 'delete':
+        deleteId = data.id;
+        setModelContent(`确定要删除角色名称为${data.roleName}的角色吗?`);
         break;
       case 'edit':
         setEditVisible(true);;
@@ -142,6 +159,12 @@ const RoleManagement: React.FC =  () => {
         ref={editFormRef}
         setEditVisible={setEditVisible}
         handleSearch={handleSearch}/>
+      {/* 确认框 */}
+      <ModalConfirm
+        content={modelContent}
+        handleBtn={deleteFun}/>
+      {/* 消息提示框 */}
+      <Notification notiMsg={notiMsg}/>
     </div>
   )
 }
