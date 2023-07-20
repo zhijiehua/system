@@ -2,14 +2,15 @@
  * @Description: 角色编辑框
  * @Author: huazj
  * @Date: 2023-07-19 23:38:19
- * @LastEditTime: 2023-07-20 16:36:08
+ * @LastEditTime: 2023-07-20 18:17:27
  * @LastEditors: huazj
  */
-import React, { memo, forwardRef } from 'react';
+import React, { memo, forwardRef, useEffect, useState } from 'react';
 import { Drawer, Form, Button, Input } from 'antd';
 const EditForm = forwardRef(({editVisible, setEditVisible}:{editVisible:boolean, setEditVisible:Function}, ref) => {
 
   const [form] = Form.useForm();
+  const [isEdit, setIsEdit] = useState(false);
 
   /**
    * @description: 关闭
@@ -25,20 +26,31 @@ const EditForm = forwardRef(({editVisible, setEditVisible}:{editVisible:boolean,
    */  
   const handleSubmit = () => {
     form.validateFields().then(res => {
-      console.log(res);
+      // form.getFieldsValue(true);
+      console.log(form.getFieldsValue(true));
     })
   }
+
+  useEffect(() => {
+    if(!editVisible) return;
+    setTimeout(() => {
+      if(form.getFieldValue('id')) setIsEdit(true);
+      else setIsEdit(false);
+    })
+  }, [editVisible])
 
   return(
     <>
       <Drawer
-        title="新增角色"
+        title={isEdit? '修改角色': '新增角色'}
         placement="right"
         onClose={onClose}
         open={editVisible}>
         <Form
           form={form}
           ref={ref as any}
+          labelCol={{ span: 6 }}
+          wrapperCol={{ span: 18   }}
           name="advanced_search"
           className="ant-advanced-search-form"
         >
@@ -52,7 +64,7 @@ const EditForm = forwardRef(({editVisible, setEditVisible}:{editVisible:boolean,
             name='roleCode'
             label='角色编码'
             rules={[{ required: true, message: '请输入角色编码' }]}>
-              <Input placeholder="请输入角色编码" />
+              <Input disabled={isEdit} placeholder="请输入角色编码" />
           </Form.Item>
           <Form.Item
             name='roleDesc'

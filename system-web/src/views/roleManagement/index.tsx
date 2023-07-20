@@ -2,7 +2,7 @@
  * @Description: 角色管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-20 16:27:31
+ * @LastEditTime: 2023-07-20 17:40:53
  * @LastEditors: huazj
  */
 import React, {useEffect, useState, useCallback, useRef} from 'react';
@@ -46,7 +46,6 @@ const RoleManagement: React.FC =  () => {
       case 'edit':
         setEditVisible(true);;
         setTimeout(() => {
-          console.log(editFormRef.current)
           editFormRef.current?.setFieldsValue(data);
         })
         break;
