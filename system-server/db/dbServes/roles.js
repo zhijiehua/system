@@ -2,10 +2,12 @@
  * @Description: 角色管理
  * @Author: huazj
  * @Date: 2023-07-18 00:40:31
- * @LastEditTime: 2023-07-19 23:21:42
+ * @LastEditTime: 2023-07-20 21:33:48
  * @LastEditors: huazj
  */
 const db = require('../../db/mysql');
+
+const {createId} = require('../../utils/common');
 
 const serves = {
   /**
@@ -24,9 +26,10 @@ const serves = {
    * @return {*}
    */  
   add: async (params) => {
-    const {userName, passWord, accountId} = params;
-    const data = await db.query(`INSERT INTO users (user_name, pass_word, account_id)
-    VALUES (?, ?, ?);`, [userName, passWord, accountId]);
+    const {roleName, roleCode, roleDesc} = params;
+    const data = await db.query(`INSERT INTO roles (id, role_name, role_code, role_desc)
+    VALUES (?, ?, ?, ?)`, [createId(), roleName, roleCode, roleDesc]);
+    return data
   }
 }
 

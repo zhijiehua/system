@@ -2,7 +2,7 @@
  * @Description: 角色管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-20 17:40:53
+ * @LastEditTime: 2023-07-20 21:50:19
  * @LastEditors: huazj
  */
 import React, {useEffect, useState, useCallback, useRef} from 'react';
@@ -14,7 +14,7 @@ import Pagination from '@/components/pagination';
 import EditForm from './EditForm';
 
 import { getTableColumn } from './config';
-import { getRolesList } from '@/api/roles';
+import { getRolesList, deleRoles } from '@/api/roles';
 import request from '@/request';
 
 import './index.scss';
@@ -140,7 +140,8 @@ const RoleManagement: React.FC =  () => {
       <EditForm
         editVisible={editVisible}
         ref={editFormRef}
-        setEditVisible={setEditVisible}/>
+        setEditVisible={setEditVisible}
+        handleSearch={handleSearch}/>
     </div>
   )
 }

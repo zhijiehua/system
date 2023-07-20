@@ -2,9 +2,10 @@
  * @Description: 
  * @Author: huazj
  * @Date: 2023-07-17 00:59:54
- * @LastEditTime: 2023-07-19 23:32:52
+ * @LastEditTime: 2023-07-20 21:34:24
  * @LastEditors: huazj
  */
+const { v4: uuidv4 } = require('uuid');
 const expostData = {
   /**
    * @description: 返回给前端
@@ -38,6 +39,10 @@ const expostData = {
       }
     }
   },
+  /**
+   * @description: 将数据库下划线转驼峰
+   * @return {*}
+   */  
   toCamel: (data) => {
     let results;
     const changeFun = (str) => {
@@ -61,6 +66,13 @@ const expostData = {
       results = data;
     }
     return results;
+  },
+  /**
+   * @description: 生成随机id
+   * @return {*}
+   */  
+  createId: () => {
+    return uuidv4()
   }
 }
 module.exports = expostData;

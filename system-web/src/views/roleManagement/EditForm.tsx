@@ -2,15 +2,29 @@
  * @Description: 角色编辑框
  * @Author: huazj
  * @Date: 2023-07-19 23:38:19
- * @LastEditTime: 2023-07-20 18:17:27
+ * @LastEditTime: 2023-07-20 21:45:10
  * @LastEditors: huazj
  */
 import React, { memo, forwardRef, useEffect, useState } from 'react';
 import { Drawer, Form, Button, Input } from 'antd';
-const EditForm = forwardRef(({editVisible, setEditVisible}:{editVisible:boolean, setEditVisible:Function}, ref) => {
+
+import Notification from '@/components/Notification';
+
+import request from '@/request';
+import { addRoles } from '@/api/roles';
+import { type } from 'os';
+
+type props = {
+  editVisible:boolean,
+  setEditVisible:Function,
+  handleSearch:Function
+}
+const EditForm = forwardRef(({editVisible, setEditVisible, handleSearch}:props, ref) => {
 
   const [form] = Form.useForm();
   const [isEdit, setIsEdit] = useState(false);
+
+  const [notiMsg, setNotiMsg] = useState<notiMsgType>({type: '', message: ''});
 
   /**
    * @description: 关闭
@@ -25,9 +39,12 @@ const EditForm = forwardRef(({editVisible, setEditVisible}:{editVisible:boolean,
    * @return {*}
    */  
   const handleSubmit = () => {
-    form.validateFields().then(res => {
-      // form.getFieldsValue(true);
-      console.log(form.getFieldsValue(true));
+    form.validateFields().then(async () => {
+      const {code, data} = await request(addRoles, form.getFieldsValue(true));
+      if(code !== 200) return;
+      setNotiMsg({type: 'success', message: '操作成功'});
+      onClose();
+      handleSearch();
     })
   }
 
@@ -77,6 +94,7 @@ const EditForm = forwardRef(({editVisible, setEditVisible}:{editVisible:boolean,
           </div>
         </Form>
       </Drawer>
+      <Notification notiMsg={notiMsg}/>
     </>
   )
 })
