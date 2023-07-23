@@ -2,7 +2,7 @@
  * @Description: 角色编辑框
  * @Author: huazj
  * @Date: 2023-07-19 23:38:19
- * @LastEditTime: 2023-07-20 21:45:10
+ * @LastEditTime: 2023-07-23 21:42:21
  * @LastEditors: huazj
  */
 import React, { memo, forwardRef, useEffect, useState } from 'react';
@@ -11,7 +11,7 @@ import { Drawer, Form, Button, Input } from 'antd';
 import Notification from '@/components/Notification';
 
 import request from '@/request';
-import { addRoles } from '@/api/roles';
+import { addRoles, updateRoles } from '@/api/roles';
 import { type } from 'os';
 
 type props = {
@@ -40,7 +40,9 @@ const EditForm = forwardRef(({editVisible, setEditVisible, handleSearch}:props, 
    */  
   const handleSubmit = () => {
     form.validateFields().then(async () => {
-      const {code, data} = await request(addRoles, form.getFieldsValue(true));
+      const params = form.getFieldsValue(true);
+      const api = params.id? updateRoles: addRoles;
+      const {code, data} = await request(api, params);
       if(code !== 200) return;
       setNotiMsg({type: 'success', message: '操作成功'});
       onClose();

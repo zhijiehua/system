@@ -2,7 +2,7 @@
  * @Description: 路由
  * @Author: huazj
  * @Date: 2023-03-26 10:23:21
- * @LastEditTime: 2023-07-17 21:53:32
+ * @LastEditTime: 2023-07-23 21:37:37
  * @LastEditors: huazj
  */
 
@@ -30,7 +30,7 @@ const withLoadingComponent = (comp:JSX.Element) => (
 const routes = [
   {
     path: '/',
-    element: <Navigate to="/subnav1"></Navigate>
+    element: <Navigate to="/system"></Navigate>
   },
   {
     path: '/login',

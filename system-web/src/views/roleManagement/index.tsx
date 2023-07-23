@@ -2,7 +2,7 @@
  * @Description: 角色管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-21 00:25:37
+ * @LastEditTime: 2023-07-23 23:10:41
  * @LastEditors: huazj
  */
 import React, {useEffect, useState, useCallback, useRef} from 'react';
@@ -76,13 +76,14 @@ const RoleManagement: React.FC =  () => {
    * @param {any} values
    */  
   const handleSearch = useCallback(async () => {
-    const {code, data} = await request(getRolesList, {
+    const {code, data:{total, records}} = await request(getRolesList, {
       current: pagesInfo.current,
       size: pagesInfo.size,
       ...form.getFieldsValue()
     })
     if(code !== 200) return;
-    setTableData(data);
+    setPagesInfo({...pagesInfo, total})
+    setTableData(records);
   }, [])
 
   /**
