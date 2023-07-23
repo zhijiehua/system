@@ -2,21 +2,21 @@
  * @Description: 角色管理
  * @Author: huazj
  * @Date: 2023-07-17 22:38:08
- * @LastEditTime: 2023-07-21 00:26:10
+ * @LastEditTime: 2023-07-23 23:13:24
  * @LastEditors: huazj
  */
 const Router = require('koa-router');
 const router = new Router();
 
-const { toCamel } = require('../utils/common');
-const { searchSQL, addSQL, deleteSQL } = require('../db/dbServes/roles');
+// const { toCamel } = require('../utils/common');
+const { searchSQL, addSQL, updateSQL, deleteSQL } = require('../db/dbServes/roles');
 
 // 获取列表
 router.post('/getList', async (ctx, next) => {
   const params = ctx.request.body;
   const searchData = await searchSQL(params);
   if(searchData.code === 200) {
-    ctx.success(toCamel(searchData.results), '操作成功');
+    ctx.success(searchData.results, '操作成功');
   } else {
     ctx.fail(searchData.results);
   }
@@ -26,6 +26,17 @@ router.post('/getList', async (ctx, next) => {
 router.put('/addRoles', async (ctx, next) => {
   const params = ctx.request.body;
   const dbData = await addSQL(params);
+  if(dbData.code === 200) {
+    ctx.success(null, '操作成功');
+  } else {
+    ctx.fail(dbData.results);
+  }
+})
+
+// 修改
+router.put('/updateRoles', async (ctx, next) => {
+  const params = ctx.request.body;
+  const dbData = await updateSQL(params);
   if(dbData.code === 200) {
     ctx.success(null, '操作成功');
   } else {
