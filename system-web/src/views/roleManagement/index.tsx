@@ -1,8 +1,8 @@
 /*
- * @Description: 角色管理
+ * @Description: 字典管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-24 10:41:18
+ * @LastEditTime: 2023-07-24 21:47:40
  * @LastEditors: huazj
  */
 import React, {useEffect, useState, useCallback, useRef} from 'react';
@@ -38,6 +38,11 @@ const RoleManagement: React.FC =  () => {
     handleSearch();
   }, [])
 
+  /**
+   * @description: 删除
+   * @return {*}
+   * @param {*} useCallback
+   */  
   const deleteFun = useCallback(async (type:string) => {
     if(type === 'sure') {
       const {code} = await request(deleRoles, {id: deleteId});
@@ -107,7 +112,7 @@ const RoleManagement: React.FC =  () => {
     })
   }
   return (
-    <div className='roleManagement'>
+    <div className='dictManagement'>
       {/* 查询表单 */}
       <Form
         form={form}

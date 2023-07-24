@@ -2,7 +2,7 @@
  * @Description: 字典管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-24 10:40:16
+ * @LastEditTime: 2023-07-24 21:52:34
  * @LastEditors: huazj
  */
 import { useCallback, useRef, useState, useEffect } from 'react';
@@ -11,18 +11,28 @@ import { Button, Col, Form, Input, Row, Table } from 'antd';
 import type { FormInstance } from 'antd/es/form/Form';
 
 import Pagination from '@/components/pagination';
+import EditForm from './EditForm';
+import ModalConfirm from '@/components/ModalConfirm';
+import Notification from '@/components/Notification';
 
 import { getTableColumn, DataType } from './config';
+import { getDictList, updateDictStatus, deleteDicts } from '@/api/dict';
+import request from '@/request';
 
+import './index.scss';
+
+let deleteId:string;
 const DictManagement: React.FC =  () => {
 
   const [form] = Form.useForm();
   const [tableData, setTableData] = useState<DataType[]>([]);
+  const [modelContent, setModelContent] = useState('');
   const [pagesInfo, setPagesInfo] = useState({
     current: 1,
     size: 10,
     total: 0
   })
+  const [notiMsg, setNotiMsg] = useState<notiMsgType>({type: '', message: ''});
 
   /**
    * @description: 查询
@@ -30,15 +40,14 @@ const DictManagement: React.FC =  () => {
    * @param {any} values
    */  
   const handleSearch = useCallback(async () => {
-    // const {code, data:{total, records}} = await request(getRolesList, {
-    //   current: pagesInfo.current,
-    //   size: pagesInfo.size,
-    //   ...form.getFieldsValue()
-    // })
-    // if(code !== 200) return;
-    // setPagesInfo({...pagesInfo, total})
-    // setTableData(records);
-    setTableData([{dictCode: '123', dictName: '测试', dictStatus: '1', dictDesc: '描述', id: ''}]);
+    const {code, data:{total, records}} = await request(getDictList, {
+      current: pagesInfo.current,
+      size: pagesInfo.size,
+      ...form.getFieldsValue()
+    })
+    if(code !== 200) return;
+    setPagesInfo({...pagesInfo, total})
+    setTableData(records);
   }, [])
 
   useEffect(() => {
@@ -67,22 +76,45 @@ const DictManagement: React.FC =  () => {
   }
 
   /**
+   * @description: 删除
+   * @return {*}
+   * @param {*} useCallback
+   */  
+  const deleteFun = useCallback(async (type:string) => {
+    if(type === 'sure') {
+      const {code} = await request(deleteDicts, {id: deleteId});
+      if(code !== 200) return;
+      handleSearch();
+      setNotiMsg({type: 'success', message: '操作成功'});
+    }
+    setModelContent('');
+  }, [])
+
+  /**
    * @description: 表格点击事件
    * @return {*}
    * @param {string} type
    * @param {object} data
    */
-  const handleTableBtn = async (type:string, data:{id:string, roleName:string}) => {
+  const handleTableBtn = async (type:string, data:{id:string, dictStatus:number, dictName:string}) => {
     switch (type) {
       case 'delete':
-        // deleteId = data.id;
-        // setModelContent(`确定要删除角色名称为${data.roleName}的角色吗?`);
+        deleteId = data.id;
+        setModelContent(`确定要删除角色名称为${data.dictName}的角色吗?`);
         break;
       case 'edit':
         setEditVisible(true);;
         setTimeout(() => {
           editFormRef.current?.setFieldsValue(data);
         })
+        break;
+      case 'status':
+        const preStatus = data.dictStatus === 1? 0: 1;
+        const {code} = await request(updateDictStatus, {id: data.id, dictStatus: preStatus});
+        if(code !== 200) return;
+        let find = tableData.find(item => item === data);
+        if(find) find.dictStatus = preStatus;
+        setTableData([...tableData]);
         break;
     }
   }
@@ -101,16 +133,16 @@ const DictManagement: React.FC =  () => {
         <Row gutter={24}>
           <Col span={6}>
             <Form.Item
-              name='roleName'
+              name='dictName'
               label=''>
-                <Input placeholder="请输入角色名称搜索" />
+                <Input placeholder="请输入字典名称搜索" />
             </Form.Item>
           </Col>
           <Col span={6}>
             <Form.Item
-              name='roleCode'
+              name='dictCode'
               label=''>
-                <Input placeholder="请输入角色编码搜索" />
+                <Input placeholder="请输入字典编码搜索" />
             </Form.Item>
           </Col>
           <Button type='primary' htmlType="submit">查 询</Button>
@@ -136,6 +168,18 @@ const DictManagement: React.FC =  () => {
         pagesInfo={pagesInfo}
         setPagesInfo={setPagesInfo}
         handleSearch={handleSearch}/>
+      {/* 编辑框 */}
+      <EditForm
+        editVisible={editVisible}
+        ref={editFormRef}
+        setEditVisible={setEditVisible}
+        handleSearch={handleSearch}/>
+      {/* 确认框 */}
+      <ModalConfirm
+        content={modelContent}
+        handleBtn={deleteFun}/>
+      {/* 消息提示框 */}
+      <Notification notiMsg={notiMsg}/>
     </div>
   )
 }

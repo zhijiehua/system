@@ -2,21 +2,30 @@
  * @Description: 
  * @Author: huazj
  * @Date: 2023-07-17 21:55:22
- * @LastEditTime: 2023-07-24 10:39:59
+ * @LastEditTime: 2023-07-24 17:55:28
  * @LastEditors: huazj
  */
 import type { ColumnsType } from 'antd/es/table';
 
-import { Space, Button } from 'antd';
+import { Space, Switch } from 'antd';
 
+/**
+ * @description: 表数据类型
+ * @return {*}
+ */
 export interface DataType {
   id: string,
   dictCode?: string;
   dictName?: string;
-  dictStatus?: string;
+  dictStatus?: number;
   dictDesc?: string;
 }
 
+/**
+ * @description: 获取表格
+ * @return {*}
+ * @param {Function} callback
+ */
 export const getTableColumn = (callback:Function) => {
   const tableColumn:ColumnsType<DataType> = [
     {
@@ -48,7 +57,13 @@ export const getTableColumn = (callback:Function) => {
       dataIndex: 'dictStatus',
       key: 'name',
       align: 'center',
-      render: text => <a>{text}</a>,
+      render: (text, data) => {
+        return (
+          <Switch
+            checked={Boolean(data.dictStatus)}
+            onChange={() => callback('status', data)} />
+        )
+      }
     },
     {
       title: '字典描述',
@@ -72,3 +87,18 @@ export const getTableColumn = (callback:Function) => {
   ]; 
   return tableColumn;
 }
+
+/**
+ * @description: 字典状态
+ * @return {*}
+ */
+export const distStatusList = [
+  {
+    label: '启用',
+    value: 1
+  },
+  {
+    label: '停用',
+    value: 0
+  },
+]
