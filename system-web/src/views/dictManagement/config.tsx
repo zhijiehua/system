@@ -2,19 +2,21 @@
  * @Description: 
  * @Author: huazj
  * @Date: 2023-07-17 21:55:22
- * @LastEditTime: 2023-07-24 10:41:05
+ * @LastEditTime: 2023-07-24 10:39:59
  * @LastEditors: huazj
  */
 import type { ColumnsType } from 'antd/es/table';
 
 import { Space, Button } from 'antd';
+
 export interface DataType {
   id: string,
-  roleName?: string;
-  roleDesc?: string;
-  roleCode?: string;
-  number?: number;
+  dictCode?: string;
+  dictName?: string;
+  dictStatus?: string;
+  dictDesc?: string;
 }
+
 export const getTableColumn = (callback:Function) => {
   const tableColumn:ColumnsType<DataType> = [
     {
@@ -28,29 +30,29 @@ export const getTableColumn = (callback:Function) => {
       }
     },
     {
-      title: '角色编码',
-      dataIndex: 'roleCode',
+      title: '字典编码',
+      dataIndex: 'dictCode',
       key: 'name',
       align: 'center',
       render: text => <a>{text}</a>,
     },
     {
-      title: '角色名称',
-      dataIndex: 'roleName',
+      title: '字典名称',
+      dataIndex: 'dictName',
       key: 'name',
       align: 'center',
       render: text => <a>{text}</a>,
     },
     {
-      title: '角色描述',
-      dataIndex: 'roleDesc',
+      title: '状态',
+      dataIndex: 'dictStatus',
       key: 'name',
       align: 'center',
       render: text => <a>{text}</a>,
     },
     {
-      title: '关联帐号数',
-      dataIndex: 'number',
+      title: '字典描述',
+      dataIndex: 'dictDesc',
       key: 'name',
       align: 'center',
       render: text => <a>{text}</a>,
@@ -62,6 +64,7 @@ export const getTableColumn = (callback:Function) => {
       render: (_, record) => (
         <Space size="middle">
           <a onClick={() => callback('edit', record)}>编辑</a>
+          <a onClick={() => callback('dictItem', record)}>字典项</a>
           <a onClick={() => callback('delete', record)}>删除</a>
         </Space>
       ),

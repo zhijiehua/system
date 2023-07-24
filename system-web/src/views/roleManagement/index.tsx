@@ -2,20 +2,20 @@
  * @Description: 角色管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-23 23:10:41
+ * @LastEditTime: 2023-07-24 10:41:18
  * @LastEditors: huazj
  */
 import React, {useEffect, useState, useCallback, useRef} from 'react';
 import { Button, Col, Form, Input, Row, Table } from 'antd';
 
-import type { FormInstance } from 'antd/es/form/Form'; 'antd';
+import type { FormInstance } from 'antd/es/form/Form';
 
 import Pagination from '@/components/pagination';
 import ModalConfirm from '@/components/ModalConfirm';
 import Notification from '@/components/Notification';
 import EditForm from './EditForm';
 
-import { getTableColumn } from './config';
+import { getTableColumn, DataType } from './config';
 import { getRolesList, deleRoles } from '@/api/roles';
 import request from '@/request';
 
@@ -24,12 +24,12 @@ let deleteId:string;
 
 const RoleManagement: React.FC =  () => {
   
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState<DataType[]>([]);
   const [form] = Form.useForm();
   const [pagesInfo, setPagesInfo] = useState({
     current: 1,
     size: 10,
-    total: 100
+    total: 0
   })
   const [modelContent, setModelContent] = useState('');
   const [notiMsg, setNotiMsg] = useState<notiMsgType>({type: '', message: ''});
@@ -107,7 +107,7 @@ const RoleManagement: React.FC =  () => {
     })
   }
   return (
-    <div className='roleManagement' style={{display: 'flex', flexDirection: 'column', flex: 1}}>
+    <div className='roleManagement'>
       {/* 查询表单 */}
       <Form
         form={form}
@@ -137,8 +137,7 @@ const RoleManagement: React.FC =  () => {
       </Form>
       {/* 表格 */}
       <div
-        className='option1'
-        style={{flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column'}}>
+        className='option1'>
         <Table
           size='small'
           columns={tableColumns}
