@@ -2,7 +2,7 @@
  * @Description: 角色管理
  * @Author: huazj
  * @Date: 2023-07-18 00:40:31
- * @LastEditTime: 2023-07-23 23:15:01
+ * @LastEditTime: 2023-07-24 16:38:41
  * @LastEditors: huazj
  */
 const db = require('../../db/mysql');
@@ -16,7 +16,7 @@ const serves = {
   searchSQL: async ({current, size, roleName = '', roleCode = ''}) => {
     const begin = size * (current - 1);
     const end = begin + size;
-    let total = await db.query("select count(*) as total from roles where role_name = ?", ['admin']);
+    let total = await db.query("select count(*) as total from roles");
     let data = await db.query(
       "select * from roles where (role_name = ? or ? = '') and (role_code = ? or ? = '') limit ? , ?",
       [roleName, roleName, roleCode, roleCode, begin, end,]
@@ -42,6 +42,10 @@ const serves = {
    */  
   addSQL: async (params) => {
     const {roleName, roleCode, roleDesc} = params;
+    const {results} = await db.query('select role_code from roles where role_code = ?', [roleCode]);
+    if(results.length !== 0) {
+      return {code: 400, results: '角色编码不能重复'}
+    } 
     const data = await db.query(`INSERT INTO roles (id, role_name, role_code, role_desc)
     VALUES (?, ?, ?, ?)`, [createId(), roleName, roleCode, roleDesc]);
     return data
