@@ -2,7 +2,7 @@
  * @Description: 字典管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-24 21:52:34
+ * @LastEditTime: 2023-07-25 11:10:57
  * @LastEditors: huazj
  */
 import { useCallback, useRef, useState, useEffect } from 'react';
@@ -14,6 +14,7 @@ import Pagination from '@/components/pagination';
 import EditForm from './EditForm';
 import ModalConfirm from '@/components/ModalConfirm';
 import Notification from '@/components/Notification';
+import DictItems from './dictItems/index';
 
 import { getTableColumn, DataType } from './config';
 import { getDictList, updateDictStatus, deleteDicts } from '@/api/dict';
@@ -90,13 +91,16 @@ const DictManagement: React.FC =  () => {
     setModelContent('');
   }, [])
 
+  const [isModalOpen, setIsModelOpen] = useState(false);
+  const [selectDictCode, setSelectDictCode] = useState('');
+
   /**
    * @description: 表格点击事件
    * @return {*}
    * @param {string} type
    * @param {object} data
    */
-  const handleTableBtn = async (type:string, data:{id:string, dictStatus:number, dictName:string}) => {
+  const handleTableBtn = async (type:string, data:DataType) => {
     switch (type) {
       case 'delete':
         deleteId = data.id;
@@ -115,6 +119,10 @@ const DictManagement: React.FC =  () => {
         let find = tableData.find(item => item === data);
         if(find) find.dictStatus = preStatus;
         setTableData([...tableData]);
+        break;
+      case 'dictItem':
+        setIsModelOpen(true);
+        setSelectDictCode(data.dictCode || '');
         break;
     }
   }
@@ -151,18 +159,15 @@ const DictManagement: React.FC =  () => {
         </Row>
       </Form>
       {/* 表格 */}
-      <div
-        className='option1'>
-        <Table
-          size='small'
-          columns={tableColumns}
-          bordered={true}
-          className="scrollTable"
-          rowKey={record => record.id}
-          pagination={false}
-          scroll={{y: 12040}}
-          dataSource={tableData} />
-      </div>
+      <Table
+        size='small'
+        columns={tableColumns}
+        bordered={true}
+        className="scrollTable"
+        rowKey={record => record.id}
+        pagination={false}
+        scroll={{y: 12040}}
+        dataSource={tableData} />
       {/* 分页 */}
       <Pagination
         pagesInfo={pagesInfo}
@@ -180,6 +185,11 @@ const DictManagement: React.FC =  () => {
         handleBtn={deleteFun}/>
       {/* 消息提示框 */}
       <Notification notiMsg={notiMsg}/>
+      {/* 字典项 */}
+      <DictItems
+        isModalOpen={isModalOpen}
+        selectDictCode={selectDictCode}
+        setIsModelOpen={setIsModelOpen}/>
     </div>
   )
 }

@@ -2,7 +2,7 @@
  * @Description: 字典管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-24 21:47:40
+ * @LastEditTime: 2023-07-25 10:51:21
  * @LastEditors: huazj
  */
 import React, {useEffect, useState, useCallback, useRef} from 'react';
@@ -59,7 +59,7 @@ const RoleManagement: React.FC =  () => {
    * @param {string} type
    * @param {object} data
    */
-  const handleTableBtn = async (type:string, data:{id:string, roleName:string}) => {
+  const handleTableBtn = async (type:string, data:DataType) => {
     switch (type) {
       case 'delete':
         deleteId = data.id;
@@ -141,18 +141,15 @@ const RoleManagement: React.FC =  () => {
         </Row>
       </Form>
       {/* 表格 */}
-      <div
-        className='option1'>
-        <Table
-          size='small'
-          columns={tableColumns}
-          bordered={true}
-          className="scrollTable"
-          rowKey={record => record.id}
-          pagination={false}
-          scroll={{y: 12040}}
-          dataSource={tableData} />
-      </div>
+      <Table
+        size='small'
+        columns={tableColumns}
+        bordered={true}
+        className="scrollTable"
+        rowKey={record => record.id}
+        pagination={false}
+        scroll={{y: 12040}}
+        dataSource={tableData} />
       {/* 分页 */}
       <Pagination
         pagesInfo={pagesInfo}

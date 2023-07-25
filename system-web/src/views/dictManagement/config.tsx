@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: huazj
  * @Date: 2023-07-17 21:55:22
- * @LastEditTime: 2023-07-24 17:55:28
+ * @LastEditTime: 2023-07-25 09:03:15
  * @LastEditors: huazj
  */
 import type { ColumnsType } from 'antd/es/table';
@@ -102,3 +102,57 @@ export const distStatusList = [
     value: 0
   },
 ]
+
+export interface dataTypeDictItem{
+  id:string,
+  label:string,
+  value:string,
+  sort:number
+}
+export const getDictItemTableColumn = (callback:Function) => {
+  const tableColumn:ColumnsType<dataTypeDictItem> = [
+    {
+      title: '序号',
+      dataIndex: 'index',
+      width: 80,
+      key: 'name',
+      align: 'center',
+      render: (text, record, index) => {
+        return (<a>{index + 1}</a>)
+      }
+    },
+    {
+      title: '数据标签',
+      dataIndex: 'label',
+      key: 'name',
+      align: 'center',
+      render: text => <a>{text}</a>,
+    },
+    {
+      title: '数据键值',
+      dataIndex: 'value',
+      key: 'name',
+      align: 'center',
+      render: text => <a>{text}</a>,
+    },
+    {
+      title: '排序',
+      dataIndex: 'sort',
+      key: 'name',
+      align: 'center',
+      render: text => <a>{text}</a>,
+    },
+    {
+      title: '操作',
+      key: 'action',
+      align: 'center',
+      render: (_, record) => (
+        <Space size="middle">
+          <a onClick={() => callback('edit', record)}>编辑</a>
+          <a onClick={() => callback('delete', record)}>删除</a>
+        </Space>
+      ),
+    }
+  ];
+  return tableColumn
+}
