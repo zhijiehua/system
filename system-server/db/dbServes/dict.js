@@ -2,11 +2,10 @@
  * @Description: 字典
  * @Author: huazj
  * @Date: 2023-07-24 16:34:22
- * @LastEditTime: 2023-07-24 21:53:45
+ * @LastEditTime: 2023-07-25 21:13:55
  * @LastEditors: huazj
  */
 const db = require('../../db/mysql');
-const { param } = require('../../routes');
 const {createId, toCamel} = require('../../utils/common');
 
 const serves = {
@@ -79,7 +78,54 @@ const serves = {
     const {id} = params;
     const data = await db.query(`delete from dicts where id = ?`, [id]);
     return data;
+  },
+  /**
+   * @description: 添加字典项
+   * @return {*}
+   */  
+  addItemSQL: async (params) => {
+    const {dictParent, label, value, sort, dictDesc} = params;
+    const {results} = await db.query('select value from dict_item where value = ? and dict_parent = ?', [value, dictParent]);
+    if(results.length !== 0) {
+      return {code: 400, results: '数据键值不能重复'}
+    } 
+    const childId = createId();
+    const createItem =  await db.query(
+      `INSERT INTO dict_item (id, label, value, sort, dict_desc, dict_parent) VALUES (?, ?, ?, ?, ?, ?)`,
+      [childId, label, value, Number(sort), dictDesc, dictParent]);
+    return createItem;
+  },
+  /**
+   * @description: 更新字典项
+   * @return {*}
+   */  
+  updateItemSQL: async (params) => {
+    const { label, value, sort, dictDesc, id} = params;
+    const data = await db.query(
+      `update dict_item set label = ?, value = ?, sort = ? ,dict_desc = ? where id = ?`, [label, value, sort, dictDesc, id]);
+    return data
+  },
+  /**
+   * @description: 查询字典项
+   * @return {*}
+   */  
+  getDictItemSQL: async (params) => {
+    const {parentCode} = params;
+    const data = await db.query('select * from dict_item where dict_parent = ? order by sort', [parentCode]);
+    data.results = toCamel(data.results);
+    return data;
+  },
+  /**
+   * @description: 删除字典项
+   * @return {*}
+   */  
+  deleDictItemSQL: async (params) => {
+    const {id} = params;
+    const data = await db.query(`delete from dict_item where id = ?`, [id]);
+    data.results = toCamel(data.results);
+    return data;
   }
+  
 }
 
 module.exports = serves;

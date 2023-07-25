@@ -2,7 +2,7 @@
  * @Description: 角色管理
  * @Author: huazj
  * @Date: 2023-07-17 22:38:08
- * @LastEditTime: 2023-07-24 16:28:52
+ * @LastEditTime: 2023-07-25 11:21:56
  * @LastEditors: huazj
  */
 const Router = require('koa-router');
@@ -46,8 +46,12 @@ router.put('/updateRoles', async (ctx, next) => {
 // 删除
 router.delete('/deleRoles', async (ctx, next) => {
   const params = ctx.query;
-  deleteSQL(params);
-  ctx.success(null, '操作成功');
+  const dbData = await deleteSQL(params);
+  if(dbData.code === 200) {
+    ctx.success(null, '操作成功');
+  } else {
+    ctx.fail(dbData.results);
+  }
 })
 
 
