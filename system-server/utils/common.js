@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: huazj
  * @Date: 2023-07-17 00:59:54
- * @LastEditTime: 2023-07-20 21:34:24
+ * @LastEditTime: 2023-07-27 12:54:50
  * @LastEditors: huazj
  */
 const { v4: uuidv4 } = require('uuid');
@@ -36,6 +36,20 @@ const expostData = {
           code: 500,
           message: '服务器内部异常'
         }
+      }
+    }
+  },
+  /**
+   * @description: 返回给前端的数据
+   * @return {*}
+   */  
+  sendInfo: () => {
+    return async (ctx, next) => {
+      const dbData = ctx.dbData;
+      if(dbData.code === 200) {
+        ctx.success(dbData.results, '操作成功');
+      }  else {
+        ctx.fail(dbData.results);
       }
     }
   },

@@ -2,7 +2,7 @@
  * @Description: 路由入口
  * @Author: huazj
  * @Date: 2023-07-03 20:14:17
- * @LastEditTime: 2023-07-24 16:30:22
+ * @LastEditTime: 2023-07-27 12:46:43
  * @LastEditors: huazj
  */
 const Router = require('koa-router');
@@ -22,5 +22,7 @@ router.use('/menus', menusRouter.routes(), menusRouter.allowedMethods());
 router.use('/roles', rolesRouter.routes(), rolesRouter.allowedMethods());
 // 字典管理
 router.use('/dict', dictRouter.routes(), dictRouter.allowedMethods());
+
+
 
 module.exports = router;

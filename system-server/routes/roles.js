@@ -2,7 +2,7 @@
  * @Description: 角色管理
  * @Author: huazj
  * @Date: 2023-07-17 22:38:08
- * @LastEditTime: 2023-07-25 11:21:56
+ * @LastEditTime: 2023-07-27 12:57:20
  * @LastEditors: huazj
  */
 const Router = require('koa-router');
@@ -13,45 +13,33 @@ const { searchSQL, addSQL, updateSQL, deleteSQL } = require('../db/dbServes/role
 // 获取列表
 router.post('/getList', async (ctx, next) => {
   const params = ctx.request.body;
-  const searchData = await searchSQL(params);
-  if(searchData.code === 200) {
-    ctx.success(searchData.results, '操作成功');
-  } else {
-    ctx.fail(searchData.results);
-  }
+  const dbData = await searchSQL(params);
+  ctx.dbData = dbData;
+  next()
 })
 
 // 新增
 router.put('/addRoles', async (ctx, next) => {
   const params = ctx.request.body;
   const dbData = await addSQL(params);
-  if(dbData.code === 200) {
-    ctx.success(null, '操作成功');
-  } else {
-    ctx.fail(dbData.results);
-  }
+  ctx.dbData = dbData;
+  next()
 })
 
 // 修改
 router.put('/updateRoles', async (ctx, next) => {
   const params = ctx.request.body;
   const dbData = await updateSQL(params);
-  if(dbData.code === 200) {
-    ctx.success(null, '操作成功');
-  } else {
-    ctx.fail(dbData.results);
-  }
+  ctx.dbData = dbData;
+  next()
 })
 
 // 删除
 router.delete('/deleRoles', async (ctx, next) => {
   const params = ctx.query;
   const dbData = await deleteSQL(params);
-  if(dbData.code === 200) {
-    ctx.success(null, '操作成功');
-  } else {
-    ctx.fail(dbData.results);
-  }
+  ctx.dbData = dbData;
+  next()
 })
 
 
