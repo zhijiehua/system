@@ -2,7 +2,7 @@
  * @Description: 字典管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-25 10:51:21
+ * @LastEditTime: 2023-07-27 15:09:18
  * @LastEditors: huazj
  */
 import React, {useEffect, useState, useCallback, useRef} from 'react';
@@ -26,7 +26,7 @@ const RoleManagement: React.FC =  () => {
   
   const [tableData, setTableData] = useState<DataType[]>([]);
   const [form] = Form.useForm();
-  const [pagesInfo, setPagesInfo] = useState({
+  const [pagesInfo, setPagesInfo] = useState<pagesInfo>({
     current: 1,
     size: 10,
     total: 0

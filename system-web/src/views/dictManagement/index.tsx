@@ -2,7 +2,7 @@
  * @Description: 字典管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-25 11:10:57
+ * @LastEditTime: 2023-07-27 15:08:56
  * @LastEditors: huazj
  */
 import { useCallback, useRef, useState, useEffect } from 'react';
@@ -28,7 +28,7 @@ const DictManagement: React.FC =  () => {
   const [form] = Form.useForm();
   const [tableData, setTableData] = useState<DataType[]>([]);
   const [modelContent, setModelContent] = useState('');
-  const [pagesInfo, setPagesInfo] = useState({
+  const [pagesInfo, setPagesInfo] = useState<pagesInfo>({
     current: 1,
     size: 10,
     total: 0
