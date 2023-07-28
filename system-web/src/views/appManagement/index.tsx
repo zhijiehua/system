@@ -2,7 +2,7 @@
  * @Description: 应用管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-28 11:31:44
+ * @LastEditTime: 2023-07-28 15:33:40
  * @LastEditors: huazj
  */
 import { useCallback, useRef, useState, useEffect } from 'react';
@@ -58,7 +58,7 @@ const AppManagement: React.FC =  () => {
    * @return {*}
    */  
   const handleAddBtn = () => {
-    setEditVisible(true);;
+    setEditVisible(true);
     setTimeout(() => {
       editFormRef.current?.resetFields();
     })
@@ -76,7 +76,7 @@ const AppManagement: React.FC =  () => {
     switch(type) {
       case 'delete':
         deleteId = data.id;
-        setModelContent(`确定要删除角色名称为${data.appName}的角色吗?`);
+        setModelContent(`确定要删除应用名称为${data.appName}的应用吗?`);
         break;
       case 'edit':
         setEditVisible(true);;
