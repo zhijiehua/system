@@ -2,13 +2,13 @@
  * @Description: 角色管理
  * @Author: huazj
  * @Date: 2023-07-17 22:38:08
- * @LastEditTime: 2023-07-27 12:57:20
+ * @LastEditTime: 2023-07-27 22:45:36
  * @LastEditors: huazj
  */
 const Router = require('koa-router');
 const router = new Router();
 
-const { searchSQL, addSQL, updateSQL, deleteSQL } = require('../db/dbServes/roles');
+const { searchSQL, addSQL, updateSQL, deleteSQL } = require('../../db/dbServes/roles');
 
 // 获取列表
 router.post('/getList', async (ctx, next) => {
@@ -22,7 +22,7 @@ router.post('/getList', async (ctx, next) => {
 router.put('/addRoles', async (ctx, next) => {
   const params = ctx.request.body;
   const dbData = await addSQL(params);
-  ctx.dbData = dbData;
+  ctx.dbData = {...dbData, results: null};;
   next()
 })
 
@@ -30,7 +30,7 @@ router.put('/addRoles', async (ctx, next) => {
 router.put('/updateRoles', async (ctx, next) => {
   const params = ctx.request.body;
   const dbData = await updateSQL(params);
-  ctx.dbData = dbData;
+  ctx.dbData = {...dbData, results: null};;
   next()
 })
 
@@ -38,7 +38,7 @@ router.put('/updateRoles', async (ctx, next) => {
 router.delete('/deleRoles', async (ctx, next) => {
   const params = ctx.query;
   const dbData = await deleteSQL(params);
-  ctx.dbData = dbData;
+  ctx.dbData = {...dbData, results: null};;
   next()
 })
 

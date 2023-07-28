@@ -2,13 +2,13 @@
  * @Description: 用户
  * @Author: huazj
  * @Date: 2023-07-02 15:50:58
- * @LastEditTime: 2023-07-17 22:49:41
+ * @LastEditTime: 2023-07-27 22:45:13
  * @LastEditors: huazj
  */
 const Router = require('koa-router');
 const router = new Router();
 
-const { search, add } = require('../db/dbServes/users');
+const { search, add } = require('../../db/dbServes/users');
 
 router.post('/test', async (ctx, next) => {
   const params = ctx.request.body;

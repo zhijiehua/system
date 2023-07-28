@@ -2,13 +2,13 @@
  * @Description: 
  * @Author: huazj
  * @Date: 2023-07-24 16:27:43
- * @LastEditTime: 2023-07-27 12:56:23
+ * @LastEditTime: 2023-07-27 22:46:42
  * @LastEditors: huazj
  */
 const Router = require('koa-router');
 const router = new Router();
 
-const { searchSQL, addSQL, updateSQL, updateStatus, deleteSQL, addItemSQL, updateItemSQL, getDictItemSQL, deleDictItemSQL} = require('../db/dbServes/dict');
+const { searchSQL, addSQL, updateSQL, updateStatus, deleteSQL, addItemSQL, updateItemSQL, getDictItemSQL, deleDictItemSQL} = require('../../db/dbServes/dict');
 
 // 获取列表
 router.post('/getList', async (ctx, next) => {
@@ -30,7 +30,7 @@ router.put('/addDicts', async (ctx, next) => {
 router.put('/updateDicts', async (ctx, next) => {
   const params = ctx.request.body;
   const dbData = await updateSQL(params);
-  ctx.dbData = dbData;
+  ctx.dbData = {...dbData, results: null};;
   next()
 })
 
@@ -38,7 +38,7 @@ router.put('/updateDicts', async (ctx, next) => {
 router.put('/updateStatus', async (ctx, next) => {
   const params = ctx.request.body;
   const dbData = await updateStatus(params);
-  ctx.dbData = dbData;
+  ctx.dbData = {...dbData, results: null};;
   next()
 })
 
@@ -46,7 +46,7 @@ router.put('/updateStatus', async (ctx, next) => {
 router.delete('/deleDicts', async (ctx, next) => {
   const params = ctx.query;
   const dbData = deleteSQL(params);
-  ctx.dbData = dbData;
+  ctx.dbData = {...dbData, results: null};;
   next()
 })
 
@@ -54,7 +54,7 @@ router.delete('/deleDicts', async (ctx, next) => {
 router.put('/addDictItems', async (ctx, next) => {
   const params = ctx.request.body;
   const dbData = await addItemSQL(params);
-  ctx.dbData = dbData;
+  ctx.dbData = {...dbData, results: null};;
   next()
 })
 
@@ -62,7 +62,7 @@ router.put('/addDictItems', async (ctx, next) => {
 router.put('/updateDictItems', async (ctx, next) => {
   const params = ctx.request.body;
   const dbData = await updateItemSQL(params);
-  ctx.dbData = dbData;
+  ctx.dbData = {...dbData, results: null};;
   next()
 })
 
@@ -78,7 +78,7 @@ router.get('/getDictItems', async (ctx, next) => {
 router.delete('/deleDictItems', async (ctx, next) => {
   const params = ctx.query;
   const dbData = await deleDictItemSQL(params);
-  ctx.dbData = dbData;
+  ctx.dbData = {...dbData, results: null};;
   next()
 })
 
