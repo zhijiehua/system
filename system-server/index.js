@@ -2,21 +2,25 @@
  * @Description: 
  * @Author: huazj
  * @Date: 2023-07-02 13:12:01
- * @LastEditTime: 2023-07-28 00:45:44
+ * @LastEditTime: 2023-07-28 11:20:06
  * @LastEditors: huazj
  */
 const Koa = require('koa');
 const app = new Koa();
 const path = require('path');
 const bodyParser = require('koa-bodyparser');
-const KoaStatic = require('koa-static');
-const mount = require('koa-mount');
 
 const router = require('./routes');
 const { routerResponse, sendInfo } = require('./utils/common.js');
 
+const static = require('koa-static')   //静态资源服务插件
+// 配置静态资源
+const staticPath = './public/upload'
+app.use(static(
+    path.join( __dirname, staticPath)
+))
+
 app.use(bodyParser());
-app.use(mount('/teacher', KoaStatic('./public/upload')))
 
 app.use(routerResponse({//返回结果
   failCode: 500,
