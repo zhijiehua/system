@@ -2,7 +2,7 @@
  * @Description: 应用管理
  * @Author: huazj
  * @Date: 2023-07-27 14:58:50
- * @LastEditTime: 2023-07-27 15:01:34
+ * @LastEditTime: 2023-07-27 20:48:59
  * @LastEditors: huazj
  */
 import type { ColumnsType } from 'antd/es/table';
@@ -15,10 +15,11 @@ import { Space, Switch } from 'antd';
  */
 export interface DataType {
   id: string,
-  dictCode?: string;
-  dictName?: string;
-  dictStatus?: number;
-  dictDesc?: string;
+  appCode?: string;
+  appName?: string;
+  appIcon?:string,
+  appUrl?:string,
+  appStatus?: number
 }
 
 /**
@@ -40,41 +41,41 @@ export const getTableColumn = (callback:Function) => {
     },
     {
       title: '应用编码',
-      dataIndex: 'dictCode',
+      dataIndex: 'appCode',
       key: 'name',
       align: 'center',
       render: text => <a>{text}</a>,
     },
     {
       title: '应用名称',
-      dataIndex: 'dictName',
+      dataIndex: 'appName',
       key: 'name',
       align: 'center',
       render: text => <a>{text}</a>,
     },
     {
       title: '应用图标',
-      dataIndex: 'dictName',
+      dataIndex: 'appIcon',
       key: 'name',
       align: 'center',
       render: text => <a>{text}</a>,
     },
     {
       title: 'URL',
-      dataIndex: 'dictName',
+      dataIndex: 'appUrl',
       key: 'name',
       align: 'center',
       render: text => <a>{text}</a>,
     },
     {
       title: '状态',
-      dataIndex: 'dictStatus',
+      dataIndex: 'appStatus',
       key: 'name',
       align: 'center',
       render: (text, data) => {
         return (
           <Switch
-            checked={Boolean(data.dictStatus)}
+            checked={Boolean(data.appStatus)}
             onChange={() => callback('status', data)} />
         )
       }
@@ -86,7 +87,7 @@ export const getTableColumn = (callback:Function) => {
       render: (_, record) => (
         <Space size="middle">
           <a onClick={() => callback('edit', record)}>编辑</a>
-          <a onClick={() => callback('dictItem', record)}>字典项</a>
+          <a onClick={() => callback('dictItem', record)}>关联字典</a>
           <a onClick={() => callback('delete', record)}>删除</a>
         </Space>
       ),
@@ -94,3 +95,18 @@ export const getTableColumn = (callback:Function) => {
   ]; 
   return tableColumn;
 }
+
+/**
+ * @description: 字典状态
+ * @return {*}
+ */
+export const distStatusList = [
+  {
+    label: '启用',
+    value: 1
+  },
+  {
+    label: '停用',
+    value: 0
+  },
+]

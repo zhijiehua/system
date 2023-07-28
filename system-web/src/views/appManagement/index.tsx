@@ -2,16 +2,25 @@
  * @Description: 应用管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-27 15:08:35
+ * @LastEditTime: 2023-07-28 00:46:02
  * @LastEditors: huazj
  */
 import { useCallback, useRef, useState, useEffect } from 'react';
 import { Button, Col, Form, Input, Row, Table } from 'antd';
+import type { FormInstance } from 'antd/es/form/Form';
 
 import { getTableColumn, DataType } from './config';
+import { getAppList, updateAppStatus, deleteApps } from '@/api/app';
+import request from '@/request';
 
 import Pagination from '@/components/pagination';
+import EditForm from './EditForm';
+import ModalConfirm from '@/components/ModalConfirm';
+import Notification from '@/components/Notification';
 
+import './index.scss';
+
+let deleteId:string;
 const AppManagement: React.FC =  () => {
 
   const [form] = Form.useForm();
@@ -24,31 +33,96 @@ const AppManagement: React.FC =  () => {
    * @description:  查询列表
    * @return {*}
    */  
-  const handleSearch = () => {
-
+  const handleSearch = async () => {
+    const {code, data:{total, records}} = await request(getAppList, {
+      current: pagesInfo.current,
+      size: pagesInfo.size,
+      ...form.getFieldsValue()
+    })
+    if(code !== 200) return;
+    setPagesInfo({...pagesInfo, total})
+    setTableData(records);
   }
   /**
    * @description: 重置
    * @return {*}
    */  
   const handlleReset = () => {
-
+    form.resetFields();
   }
+
+  const editFormRef = useRef<FormInstance>();
+  const [editVisible, setEditVisible] = useState(false);
   /**
    * @description: 新增
    * @return {*}
    */  
   const handleAddBtn = () => {
-
+    setEditVisible(true);;
+    setTimeout(() => {
+      editFormRef.current?.resetFields();
+    })
   }
 
-  const handleTableBtn = () => {
-
+  // const [isModalOpen, setIsModelOpen] = useState(false);
+  // const [selectDictCode, setSelectDictCode] = useState('');
+  /**
+   * @description: 表格点击事件
+   * @return {*}
+   * @param {string} type
+   * @param {DataType} data
+   */  
+  const handleTableBtn = async (type:string, data:DataType) => {
+    switch(type) {
+      case 'delete':
+        deleteId = data.id;
+        setModelContent(`确定要删除角色名称为${data.appName}的角色吗?`);
+        break;
+      case 'edit':
+        setEditVisible(true);;
+        setTimeout(() => {
+          editFormRef.current?.setFieldsValue(data);
+        })
+        break;
+      case 'status':
+        const preStatus = data.appStatus === 1? 0: 1;
+        const {code} = await request(updateAppStatus, {id: data.id, appStatus: preStatus});
+        if(code !== 200) return;
+        let find = tableData.find(item => item === data);
+        if(find) find.appStatus = preStatus;
+        setTableData([...tableData]);
+        break;
+      case 'dictItem':
+        // setIsModelOpen(true);
+        // setSelectDictCode(data.appCode || '');
+        break;
+    }
   }
   const [tableData, setTableData] = useState<DataType[]>([]);
+  const [modelContent, setModelContent] = useState('');
   const tableColumns = getTableColumn(handleTableBtn);
+  const [notiMsg, setNotiMsg] = useState<notiMsgType>({type: '', message: ''});
 
-  return (
+  /**
+   * @description: 删除
+   * @return {*}
+   * @param {*} useCallback
+   */  
+  const deleteFun = useCallback(async (type:string) => {
+    if(type === 'sure') {
+      const {code} = await request(deleteApps, {id: deleteId});
+      if(code !== 200) return;
+      handleSearch();
+      setNotiMsg({type: 'success', message: '操作成功'});
+    }
+    setModelContent('');
+  }, [])
+
+  useEffect(() => {
+    handleSearch();
+  }, [])
+
+  return (  
     <div
       className='appManagement'>
       {/* 查询表单 */}
@@ -61,14 +135,14 @@ const AppManagement: React.FC =  () => {
         <Row gutter={24}>
           <Col span={6}>
             <Form.Item
-              name='dictName'
+              name='appName'
               label=''>
                 <Input placeholder="请输入应用名称搜索" />
             </Form.Item>
           </Col>
           <Col span={6}>
             <Form.Item
-              name='dictCode'
+              name='appCode'
               label=''>
                 <Input placeholder="请输入应用编码搜索" />
             </Form.Item>
@@ -78,6 +152,7 @@ const AppManagement: React.FC =  () => {
           <Button style={{marginLeft: '10px'}} type='primary' onClick={handleAddBtn}>新 增</Button>
         </Row>
       </Form>
+      <img src="api/teacher/392709e79269750f0275805ca4896cf9" alt="" />
       {/* 表格 */}
       <Table
         size='small'
@@ -93,6 +168,19 @@ const AppManagement: React.FC =  () => {
         pagesInfo={pagesInfo}
         setPagesInfo={setPagesInfo}
         handleSearch={handleSearch}/>
+      {/* 编辑框 */}
+      <EditForm
+        editVisible={editVisible}
+        ref={editFormRef}
+        setEditVisible={setEditVisible}
+        handleSearch={handleSearch}/>
+      {/* 确认框 */}
+      <ModalConfirm
+        content={modelContent}
+        handleBtn={deleteFun}/>
+      {/* 消息提示框 */}
+      <Notification notiMsg={notiMsg}/>
+      {/* 字典项 */}
     </div>
   )
 }
