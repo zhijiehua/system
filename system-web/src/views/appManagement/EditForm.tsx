@@ -2,10 +2,10 @@
  * @Description: 应用
  * @Author: huazj
  * @Date: 2023-07-19 23:38:19
- * @LastEditTime: 2023-07-27 20:55:44
+ * @LastEditTime: 2023-07-28 13:14:20
  * @LastEditors: huazj
  */
-import React, { memo, forwardRef, useEffect, useState } from 'react';
+import React, { memo, forwardRef, useEffect, useState, useCallback } from 'react';
 import { Drawer, Form, Button, Input, Select } from 'antd';
 
 import Notification from '@/components/Notification';
@@ -14,6 +14,7 @@ import UploadImg from '@/components/UploadImg';
 import request from '@/request';
 import { addApps, updateApps } from '@/api/app';
 import {distStatusList} from './config';
+import type { UploadFile } from 'antd/es/upload/interface';
 
 type props = {
   editVisible:boolean,
@@ -51,11 +52,30 @@ const EditForm = forwardRef(({editVisible, setEditVisible, handleSearch}:props, 
     })
   }
 
+  /**
+   * @description: 获取文件列表
+   * @return {*}
+   * @param {*} useCallback
+   */  
+  const getfileList = useCallback((list:{url:string}[] = []) => {
+    form.setFieldValue('appIcon', list[0]?.url || '');
+  }, [])
+
+  const [prevImgList, setPrevImgList] = useState<UploadFile<any>[]>([]);
   useEffect(() => {
     if(!editVisible) return;
     setTimeout(() => {
       if(form.getFieldValue('id')) setIsEdit(true);
       else setIsEdit(false);
+      const appIcon = form.getFieldValue('appIcon');
+      if(appIcon) {
+        setPrevImgList([{
+          uid: '-2',
+          name: 'image.png',
+          status: 'done',
+          url: appIcon,
+        }])
+      }
     })
   }, [editVisible])
 
@@ -104,9 +124,9 @@ const EditForm = forwardRef(({editVisible, setEditVisible, handleSearch}:props, 
           <Form.Item
             name='appIcon'
             label='应用图标'
+            rules={[{ required: true, message: '请上传应用图标' }]}
             >
-              {/* rules={[{ required: true, message: '请上传应用图标' }]} */}
-              <UploadImg/>
+              <UploadImg getfileList={getfileList} prevImgList={prevImgList}/>
           </Form.Item>
           <div className='alignCenter'>
             <Button type='primary' htmlType="submit" onClick={handleSubmit}>保 存</Button>

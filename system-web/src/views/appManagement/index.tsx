@@ -2,7 +2,7 @@
  * @Description: 应用管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-28 00:46:02
+ * @LastEditTime: 2023-07-28 11:31:44
  * @LastEditors: huazj
  */
 import { useCallback, useRef, useState, useEffect } from 'react';
@@ -152,7 +152,6 @@ const AppManagement: React.FC =  () => {
           <Button style={{marginLeft: '10px'}} type='primary' onClick={handleAddBtn}>新 增</Button>
         </Row>
       </Form>
-      <img src="api/teacher/392709e79269750f0275805ca4896cf9" alt="" />
       {/* 表格 */}
       <Table
         size='small'

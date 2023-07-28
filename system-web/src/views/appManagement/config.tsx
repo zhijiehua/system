@@ -2,7 +2,7 @@
  * @Description: 应用管理
  * @Author: huazj
  * @Date: 2023-07-27 14:58:50
- * @LastEditTime: 2023-07-27 20:48:59
+ * @LastEditTime: 2023-07-28 13:01:32
  * @LastEditors: huazj
  */
 import type { ColumnsType } from 'antd/es/table';
@@ -58,7 +58,9 @@ export const getTableColumn = (callback:Function) => {
       dataIndex: 'appIcon',
       key: 'name',
       align: 'center',
-      render: text => <a>{text}</a>,
+      render: text => (
+        <span className='tableImg'><img src={text} alt="" /></span>
+      ),
     },
     {
       title: 'URL',

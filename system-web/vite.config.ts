@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: huazj
  * @Date: 2023-03-25 22:06:36
- * @LastEditTime: 2023-07-16 15:51:34
+ * @LastEditTime: 2023-07-28 11:32:04
  * @LastEditors: huazj
  */
 import { defineConfig } from 'vite'
@@ -44,7 +44,13 @@ export default defineConfig({
         target: 'http://localhost:3000/api',   //代理接口
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
-      }
+      },
+      '^/img/': {
+        target: 'http://localhost:3000',   //代理接口
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/img/, '/')
+      },
+      /* <img src="/img/default" alt="" /> */
     }
   }
 })

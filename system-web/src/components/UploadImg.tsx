@@ -2,10 +2,10 @@
  * @Description: 上传图片
  * @Author: huazj
  * @Date: 2023-07-27 17:57:31
- * @LastEditTime: 2023-07-27 23:57:44
+ * @LastEditTime: 2023-07-28 13:18:45
  * @LastEditors: huazj
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Modal, Upload } from 'antd';
 import type { RcFile, UploadProps } from 'antd/es/upload';
@@ -21,13 +21,12 @@ const getBase64 = (file: RcFile): Promise<string> =>
     reader.onerror = (error) => reject(error);
   });
 
-const UploadImg: React.FC = () => {
+const UploadImg: React.FC<{getfileList:Function, prevImgList:UploadFile<any>[]}> = ({getfileList, prevImgList = []}) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
   // done 上传完成 uploading 上传中 error 上传失败
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-
   /**
    * @description: 关闭预览
    * @return {*}
@@ -47,18 +46,31 @@ const UploadImg: React.FC = () => {
     setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
   };
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) =>
+  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
-
-  const handleUpload = async (file:UploadProps) => {
-    // console.log(file.file)
-    // console.log(file)
-    // const formData = new FormData();
-    // formData.append('file', file.file);
-    const {code} = await request(uploadImg, {file: file.file});
-    console.log(code);
-
   }
+  /**
+   * @description: 自定义上传
+   * @return {*}
+   * @param {any} file
+   */    
+  const handleUpload = async (file:any) => {
+    const {code, data} = await request(uploadImg, {file: file.file});
+    setFileList([{
+      uid: '-2',
+      name: 'image.png',
+      status: 'done',
+      url: data,
+    }])
+  }
+  useEffect(() => {
+    getfileList(fileList)
+  }, [fileList])
+  useEffect(() => {
+    setTimeout(() => {
+      setFileList(prevImgList);
+    });
+  }, [prevImgList])
 
   const uploadButton = (
     <div>
@@ -91,4 +103,4 @@ const UploadImg: React.FC = () => {
   );
 };
 
-export default UploadImg;
+export default memo(UploadImg);
