@@ -2,7 +2,7 @@
  * @Description: 应用管理
  * @Author: huazj
  * @Date: 2023-07-27 14:58:50
- * @LastEditTime: 2023-07-28 16:01:35
+ * @LastEditTime: 2023-07-28 18:04:48
  * @LastEditors: huazj
  */
 import type { ColumnsType } from 'antd/es/table';
@@ -15,11 +15,12 @@ import { Space, Switch } from 'antd';
  */
 export interface DataType {
   id: string,
-  appCode?: string;
-  appName?: string;
-  appIcon?:string,
-  appUrl?:string,
-  appStatus?: number
+  userId: string;
+  userName?: string;
+  userRoles?:string,
+  status?: number
+  phone?:string,
+  email?:string
 }
 
 /**
@@ -68,7 +69,7 @@ export const getTableColumn = (callback:Function) => {
       render: (text, data) => {
         return (
           <Switch
-            checked={Boolean(data.appStatus)}
+            checked={Boolean(data.status)}
             onChange={() => callback('status', data)} />
         )
       }
@@ -97,11 +98,12 @@ export const getTableColumn = (callback:Function) => {
     {
       title: '操作',
       key: 'action',
+      width: '300px',
       align: 'center',
       render: (_, record) => (
         <Space size="middle">
           <a onClick={() => callback('edit', record)}>编辑</a>
-          <a onClick={() => callback('dictItem', record)}>修改密码</a>
+          <a onClick={() => callback('updatePassword', record)}>修改密码</a>
           <a onClick={() => callback('dictItem', record)}>分配角色</a>
           <a onClick={() => callback('delete', record)}>删除</a>
         </Space>

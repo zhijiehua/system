@@ -2,12 +2,13 @@
  * @Description: 帐号管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-28 15:51:05
+ * @LastEditTime: 2023-07-28 18:05:44
  * @LastEditors: huazj
  */
 import { useCallback, useRef, useState, useEffect } from 'react';
 import { Button, Col, Form, Input, Row, Table } from 'antd';
 import request from '@/request';
+import { getUserList, deleAccount, updateUserStatus } from '@/api/account';
 
 import { getTableColumn, DataType } from './config';
 import type { FormInstance } from 'antd/es/form/Form';
@@ -16,6 +17,7 @@ import Pagination from '@/components/pagination';
 import ModalConfirm from '@/components/ModalConfirm';
 import Notification from '@/components/Notification';
 import EditForm from './EditForm';
+import PasswordForm from './PasswordForm';
 
 import './index.scss';
 
@@ -28,35 +30,43 @@ const AccountManagement: React.FC =  () => {
     size: 10,
     total: 0
   })
+  const [passwordInfo, setPasswordInfo] = useState<{visible:boolean, userId:string}>({
+    visible: false,
+    userId: ''
+  });
 
-    /**
+
+  /**
    * @description: 表格点击事件
    * @return {*}
    * @param {string} type
    * @param {DataType} data
    */  
-    const handleTableBtn = async (type:string, data:DataType) => {
-      switch(type) {
-        case 'delete':
-          deleteId = data.id;
-          setModelContent(`确定要删除应用名称为${data.appName}的应用吗?`);
-          break;
-        case 'edit':
-          setEditVisible(true);;
-          setTimeout(() => {
-            editFormRef.current?.setFieldsValue(data);
-          })
-          break;
-        case 'status':
-          // const preStatus = data.appStatus === 1? 0: 1;
-          // const {code} = await request(updateAppStatus, {id: data.id, appStatus: preStatus});
-          // if(code !== 200) return;
-          // let find = tableData.find(item => item === data);
-          // if(find) find.appStatus = preStatus;
-          // setTableData([...tableData]);
-          break;
-      }
+  const handleTableBtn = async (type:string, data:DataType) => {
+    switch(type) {
+      case 'delete':
+        deleteId = data.id;
+        setModelContent(`确定要删除帐号名称为${data.userName}的帐号吗?`);
+        break;
+      case 'edit':
+        setEditVisible(true);;
+        setTimeout(() => {
+          editFormRef.current?.setFieldsValue(data);
+        })
+        break;
+      case 'status':
+        const preStatus = data.status === 1? 0: 1;
+        const {code} = await request(updateUserStatus, {id: data.id, status: preStatus});
+        if(code !== 200) return;
+        let find = tableData.find(item => item === data);
+        if(find) find.status = preStatus;
+        setTableData([...tableData]);
+        break;
+      case 'updatePassword':
+        setPasswordInfo({visible: true, userId: data.userId})
+        break;
     }
+  }
   const [tableData, setTableData] = useState<DataType[]>([]);
   const [modelContent, setModelContent] = useState('');
   const tableColumns = getTableColumn(handleTableBtn);
@@ -66,15 +76,18 @@ const AccountManagement: React.FC =  () => {
    * @return {*}
    */  
   const handleSearch = async () => {
-    // const {code, data:{total, records}} = await request(getAppList, {
-    //   current: pagesInfo.current,
-    //   size: pagesInfo.size,
-    //   ...form.getFieldsValue()
-    // })
-    // if(code !== 200) return;
-    // setPagesInfo({...pagesInfo, total})
-    // setTableData(records);
+    const {code, data:{total, records}} = await request(getUserList, {
+      current: pagesInfo.current,
+      size: pagesInfo.size,
+      ...form.getFieldsValue()
+    })
+    if(code !== 200) return;
+    setPagesInfo({...pagesInfo, total})
+    setTableData(records);
   }
+  useEffect(() => {
+    handleSearch();
+  }, [])
   /**
    * @description: 删除
    * @return {*}
@@ -82,10 +95,10 @@ const AccountManagement: React.FC =  () => {
    */  
   const deleteFun = useCallback(async (type:string) => {
     if(type === 'sure') {
-      // const {code} = await request(deleteApps, {id: deleteId});
-      // if(code !== 200) return;
-      // handleSearch();
-      // setNotiMsg({type: 'success', message: '操作成功'});
+      const {code} = await request(deleAccount, {id: deleteId});
+      if(code !== 200) return;
+      handleSearch();
+      setNotiMsg({type: 'success', message: '操作成功'});
     }
     setModelContent('');
   }, [])
@@ -160,6 +173,10 @@ const AccountManagement: React.FC =  () => {
         ref={editFormRef}
         setEditVisible={setEditVisible}
         handleSearch={handleSearch}/>
+      {/* 修改密码 */}
+      <PasswordForm
+        passwordInfo={passwordInfo}
+        setPasswordInfo={setPasswordInfo}/>
       {/* 确认框 */}
       <ModalConfirm
         content={modelContent}

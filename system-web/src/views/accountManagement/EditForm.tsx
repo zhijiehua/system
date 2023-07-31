@@ -2,7 +2,7 @@
  * @Description: 字典编辑框
  * @Author: huazj
  * @Date: 2023-07-19 23:38:19
- * @LastEditTime: 2023-07-28 16:01:30
+ * @LastEditTime: 2023-07-29 11:44:32
  * @LastEditors: huazj
  */
 import React, { memo, forwardRef, useEffect, useState } from 'react';
@@ -11,7 +11,7 @@ import { Drawer, Form, Button, Input, Select } from 'antd';
 import Notification from '@/components/Notification';
 
 import request from '@/request';
-import { addDicts, updateDicts } from '@/api/dict';
+import { addAccount, updateAccount } from '@/api/account';
 import {distStatusList} from './config';
 
 type props = {
@@ -20,7 +20,6 @@ type props = {
   handleSearch:Function
 }
 const EditForm = forwardRef(({editVisible, setEditVisible, handleSearch}:props, ref) => {
-
   const [form] = Form.useForm();
   const [isEdit, setIsEdit] = useState(false);
 
@@ -41,7 +40,7 @@ const EditForm = forwardRef(({editVisible, setEditVisible, handleSearch}:props, 
   const handleSubmit = () => {
     form.validateFields().then(async () => {
       const params = form.getFieldsValue(true);
-      const api = params.id? updateDicts: addDicts;
+      const api = params.id? updateAccount: addAccount;
       const {code, data} = await request(api, params);
       if(code !== 200) return;
       setNotiMsg({type: 'success', message: '操作成功'});
