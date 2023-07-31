@@ -2,7 +2,7 @@
  * @Description: 应用管理
  * @Author: huazj
  * @Date: 2023-07-27 20:34:19
- * @LastEditTime: 2023-07-27 22:46:50
+ * @LastEditTime: 2023-07-29 17:37:25
  * @LastEditors: huazj
  */
 const Router = require('koa-router');
@@ -22,7 +22,7 @@ router.post('/getList', async (ctx, next) => {
 router.put('/addApps', async (ctx, next) => {
   const params = ctx.request.body;
   const dbData = await addSQL(params);
-  ctx.dbData = {...dbData, results: null};;
+  ctx.dbData = {...dbData, results: dbData.code === 200? null: dbData.results};
   next()
 })
 
@@ -30,7 +30,7 @@ router.put('/addApps', async (ctx, next) => {
 router.put('/updateApps', async (ctx, next) => {
   const params = ctx.request.body;
   const dbData = await updateSQL(params);
-  ctx.dbData = {...dbData, results: null};;
+  ctx.dbData = {...dbData, results: dbData.code === 200? null: dbData.results};
   next()
 })
 
@@ -38,7 +38,7 @@ router.put('/updateApps', async (ctx, next) => {
 router.put('/updateStatus', async (ctx, next) => {
   const params = ctx.request.body;
   const dbData = await updateStatus(params);
-  ctx.dbData = {...dbData, results: null};
+  ctx.dbData = {...dbData, results: dbData.code === 200? null: dbData.results};
   next()
 })
 
@@ -46,7 +46,7 @@ router.put('/updateStatus', async (ctx, next) => {
 router.delete('/deleApps', async (ctx, next) => {
   const params = ctx.query;
   const dbData = await deleteSQL(params);
-  ctx.dbData = {...dbData, results: null};;
+  ctx.dbData = {...dbData, results: dbData.code === 200? null: dbData.results};
   next()
 })
 
