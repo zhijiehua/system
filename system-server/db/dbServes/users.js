@@ -2,7 +2,7 @@
  * @Description: 调用用户信息数据库
  * @Author: huazj
  * @Date: 2023-07-17 00:33:58
- * @LastEditTime: 2023-07-29 17:35:46
+ * @LastEditTime: 2023-08-16 17:13:05
  * @LastEditors: huazj
  */
 const db = require('../../db/mysql');
@@ -88,6 +88,29 @@ const serves = {
     const {userId, password} = params;
     const data = await db.query(`update users set password = ? where user_id = ?`, [password, userId]);
     return data;
+  },
+  /**
+   * @description: 帐号设置权限
+   * @return {*}
+   */  
+  userSetRolesSQL: async (params) => {
+    const {userId, rolesIds = []} = params;
+    const deleData = await db.query(`delete from users_roles where user_id = ?`, [userId]);
+    if(deleData.code === 200) {
+      let str = '', insetAry = [];
+      for (let i = 0; i < rolesIds.length; i++) {
+        if(i === rolesIds.length - 1) {
+          str += '(?, ?)';
+        } else {
+          str += '(?, ?), ';
+        }
+        insetAry = insetAry.concat([userId, rolesIds[i]])
+      }
+      const data = await db.query(`INSERT INTO users_roles (user_id, role_id) VALUES ${str} `, insetAry);
+      return data
+    } else {
+      return deleData;
+    }
   }
   
 }

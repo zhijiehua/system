@@ -2,13 +2,13 @@
  * @Description: 用户
  * @Author: huazj
  * @Date: 2023-07-02 15:50:58
- * @LastEditTime: 2023-07-29 17:36:48
+ * @LastEditTime: 2023-08-16 17:01:55
  * @LastEditors: huazj
  */
 const Router = require('koa-router');
 const router = new Router();
 
-const { searchSQL, addSQL, updateSQL, deleteSQL, updateStatus, updatePassword } = require('../../db/dbServes/users');
+const { searchSQL, addSQL, updateSQL, deleteSQL, updateStatus, updatePassword, userSetRolesSQL } = require('../../db/dbServes/users');
 
 // 获取列表
 router.post('/getList', async (ctx, next) => {
@@ -56,6 +56,14 @@ router.put('/updatePassword', async (ctx, next) => {
   const dbData = await updatePassword(params);
   ctx.dbData = {...dbData, results: dbData.code === 200? null: dbData.results};
   next() 
+})
+
+// 分配角色
+router.put('/setRoles', async (ctx, next) => {
+  const params = ctx.request.body;
+  const dbData = await userSetRolesSQL(params);
+  ctx.dbData = {...dbData, results: dbData.code === 200? null: dbData.results};
+  next()
 })
 
 module.exports = router;

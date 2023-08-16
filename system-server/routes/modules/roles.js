@@ -2,7 +2,7 @@
  * @Description: 角色管理
  * @Author: huazj
  * @Date: 2023-07-17 22:38:08
- * @LastEditTime: 2023-07-29 17:37:38
+ * @LastEditTime: 2023-08-16 11:01:44
  * @LastEditors: huazj
  */
 const Router = require('koa-router');
@@ -41,7 +41,5 @@ router.delete('/deleRoles', async (ctx, next) => {
   ctx.dbData = {...dbData, results: dbData.code === 200? null: dbData.results};
   next()
 })
-
-
 
 module.exports = router;
