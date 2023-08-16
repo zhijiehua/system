@@ -2,13 +2,14 @@
  * @Description: 帐号管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-28 18:05:44
+ * @LastEditTime: 2023-08-16 17:14:40
  * @LastEditors: huazj
  */
 import { useCallback, useRef, useState, useEffect } from 'react';
 import { Button, Col, Form, Input, Row, Table } from 'antd';
 import request from '@/request';
 import { getUserList, deleAccount, updateUserStatus } from '@/api/account';
+import { getRolesList } from '@/api/roles';
 
 import { getTableColumn, DataType } from './config';
 import type { FormInstance } from 'antd/es/form/Form';
@@ -17,11 +18,13 @@ import Pagination from '@/components/pagination';
 import ModalConfirm from '@/components/ModalConfirm';
 import Notification from '@/components/Notification';
 import EditForm from './EditForm';
+import SetRole from './SetRole';
 import PasswordForm from './PasswordForm';
 
 import './index.scss';
-
+import {DataType as roleDataType} from '../roleManagement/config';
 let deleteId:string;
+let roleList:roleDataType[] = [];
 const AccountManagement: React.FC =  () => {
 
   const [form] = Form.useForm();
@@ -34,7 +37,6 @@ const AccountManagement: React.FC =  () => {
     visible: false,
     userId: ''
   });
-
 
   /**
    * @description: 表格点击事件
@@ -65,6 +67,9 @@ const AccountManagement: React.FC =  () => {
       case 'updatePassword':
         setPasswordInfo({visible: true, userId: data.userId})
         break;
+      case 'setRole':
+        setRoleInfo({visible: true, userId: data.userId});
+        break
     }
   }
   const [tableData, setTableData] = useState<DataType[]>([]);
@@ -85,8 +90,21 @@ const AccountManagement: React.FC =  () => {
     setPagesInfo({...pagesInfo, total})
     setTableData(records);
   }
+  /**
+   * @description: 获取所有角色
+   * @return {*}
+   */  
+  const getAllRoles = async () =>  {
+    const {code, data:{records}} = await request(getRolesList, {
+      current: 1,
+      size: 1000
+    })
+    if(code !== 200) return;
+    roleList = records;
+  }
   useEffect(() => {
     handleSearch();
+    getAllRoles();
   }, [])
   /**
    * @description: 删除
@@ -121,6 +139,11 @@ const AccountManagement: React.FC =  () => {
       editFormRef.current?.resetFields();
     })
   }
+
+  const [roleInfo, setRoleInfo] = useState<{visible:boolean, userId:string}>({
+    visible: false,
+    userId: ''
+  });
 
   return (
     <div
@@ -183,7 +206,12 @@ const AccountManagement: React.FC =  () => {
         handleBtn={deleteFun}/>
       {/* 消息提示框 */}
       <Notification notiMsg={notiMsg}/>
-      {/* 字典项 */}
+      {/* 分配角色 */}
+      <SetRole
+        roleInfo={roleInfo}
+        setRoleInfo={setRoleInfo}
+        setNotiMsg={setNotiMsg}
+        roleList={roleList}/>
     </div>
   )
 }

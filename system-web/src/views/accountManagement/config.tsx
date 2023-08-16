@@ -2,7 +2,7 @@
  * @Description: 应用管理
  * @Author: huazj
  * @Date: 2023-07-27 14:58:50
- * @LastEditTime: 2023-07-28 18:04:48
+ * @LastEditTime: 2023-08-15 15:52:26
  * @LastEditors: huazj
  */
 import type { ColumnsType } from 'antd/es/table';
@@ -104,7 +104,7 @@ export const getTableColumn = (callback:Function) => {
         <Space size="middle">
           <a onClick={() => callback('edit', record)}>编辑</a>
           <a onClick={() => callback('updatePassword', record)}>修改密码</a>
-          <a onClick={() => callback('dictItem', record)}>分配角色</a>
+          <a onClick={() => callback('setRole', record)}>分配角色</a>
           <a onClick={() => callback('delete', record)}>删除</a>
         </Space>
       ),

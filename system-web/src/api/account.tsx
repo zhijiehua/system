@@ -2,7 +2,7 @@
  * @Description: 用户管理
  * @Author: huazj
  * @Date: 2023-07-28 16:05:32
- * @LastEditTime: 2023-07-28 17:37:54
+ * @LastEditTime: 2023-08-16 15:32:56
  * @LastEditors: huazj
  */
 
@@ -40,4 +40,10 @@ export const updateUserStatus = {
 export const updatePassword = {
   method: 'put',
   url: 'users/updatePassword'
+}
+
+// 分配角色
+export const setRolesApi = {
+  method: 'put',
+  url: 'users/setRoles'
 }
