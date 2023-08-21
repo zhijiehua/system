@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: huazj
  * @Date: 2023-07-05 11:43:27
- * @LastEditTime: 2023-07-20 21:11:55
+ * @LastEditTime: 2023-08-21 10:33:24
  * @LastEditors: huazj
  */
 const mysql = require('mysql');
@@ -26,10 +26,6 @@ const query = (sql, values) => {
       } else {
         connection.query(sql, values, (err, results) => {
           if(err) {
-            console.log({
-              code: 400,
-              results: err.sqlMessage
-            })
             resolve({
               code: 400,
               results: err.sqlMessage

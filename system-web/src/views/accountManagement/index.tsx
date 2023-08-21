@@ -2,7 +2,7 @@
  * @Description: 帐号管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-08-16 17:14:40
+ * @LastEditTime: 2023-08-21 10:25:05
  * @LastEditors: huazj
  */
 import { useCallback, useRef, useState, useEffect } from 'react';
@@ -68,7 +68,7 @@ const AccountManagement: React.FC =  () => {
         setPasswordInfo({visible: true, userId: data.userId})
         break;
       case 'setRole':
-        setRoleInfo({visible: true, userId: data.userId});
+        setRoleInfo({visible: true, userId: data.userId, roleList: data.rolesList});
         break
     }
   }
@@ -140,9 +140,10 @@ const AccountManagement: React.FC =  () => {
     })
   }
 
-  const [roleInfo, setRoleInfo] = useState<{visible:boolean, userId:string}>({
+  const [roleInfo, setRoleInfo] = useState<{visible:boolean, userId:string, roleList:{id:string, roleName:string}[]}>({
     visible: false,
-    userId: ''
+    userId: '',
+    roleList: []
   });
 
   return (
@@ -211,7 +212,8 @@ const AccountManagement: React.FC =  () => {
         roleInfo={roleInfo}
         setRoleInfo={setRoleInfo}
         setNotiMsg={setNotiMsg}
-        roleList={roleList}/>
+        roleList={roleList}
+        handleSearch={handleSearch}/>
     </div>
   )
 }

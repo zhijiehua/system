@@ -2,7 +2,7 @@
  * @Description: 应用管理
  * @Author: huazj
  * @Date: 2023-07-27 14:58:50
- * @LastEditTime: 2023-08-15 15:52:26
+ * @LastEditTime: 2023-08-21 10:30:46
  * @LastEditors: huazj
  */
 import type { ColumnsType } from 'antd/es/table';
@@ -20,7 +20,8 @@ export interface DataType {
   userRoles?:string,
   status?: number
   phone?:string,
-  email?:string
+  email?:string,
+  rolesList: {id:string, roleName:string}[]
 }
 
 /**
@@ -56,10 +57,10 @@ export const getTableColumn = (callback:Function) => {
     },
     {
       title: '拥有角色',
-      dataIndex: 'userRoles',
+      dataIndex: 'rolesList',
       key: 'name',
       align: 'center',
-      render: text => <a>{text}</a>,
+      render: text => <a>{text.map((item:{roleName:string}) => item.roleName).toString()}</a>,
     },
     {
       title: '状态',

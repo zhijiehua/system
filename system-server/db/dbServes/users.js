@@ -2,11 +2,40 @@
  * @Description: 调用用户信息数据库
  * @Author: huazj
  * @Date: 2023-07-17 00:33:58
- * @LastEditTime: 2023-08-16 17:13:05
+ * @LastEditTime: 2023-08-18 11:15:27
  * @LastEditors: huazj
  */
 const db = require('../../db/mysql');
 const {createId, toCamel} = require('../../utils/common');
+
+/**
+ * @description: 帐号列表添加角色信息
+ * @return {*}
+ * @param {*} arr
+ */
+const setUserRoles = (arr) => {
+  const setPromise = (item) => {
+    return new Promise(async (resolve, reject) => {
+      const {code, results} = await db.query("select r.id, r.role_name from users_roles ur, roles r where ur.role_id = r.id and ur.user_id = ?", [item.userId]);
+      if(code === 200) {
+        item.rolesList = toCamel(results);
+        resolve();
+      }
+      reject();
+    })
+  }
+  return new Promise((resolve, reject) => {
+    const promiseList = [];
+    arr.map(item => {
+      promiseList.push(setPromise(item));
+    })
+    Promise.all(promiseList).then(res => {
+      resolve(arr);
+    }).catch(e => {
+      reject(e);
+    })
+  })
+}
 
 const serves = {
   /**
@@ -16,19 +45,22 @@ const serves = {
   searchSQL: async ({current, size, userName = '', userId = ''}) => {
     const begin = size * (current - 1);
     const end = begin + size;
+    // 获取数量
     let total = await db.query("select count(*) as total from users");
+    // 获取列表数据
     let data = await db.query(
       "select id, user_id, user_name, status, phone, email from users where (user_name = ? or ? = '') and (user_id = ? or ? = '') limit ? , ?",
       [userName, userName, userId, userId, begin, end,]
     );
     if(total.code === 200 && data.code === 200) {
-        return {
-          code: 200,
-          results: {
-            total: total.results[0].total,
-            records: toCamel(data.results)
-          }
+      const list = await setUserRoles(toCamel(data.results));
+      return {
+        code: 200,
+        results: {
+          total: total.results[0].total,
+          records: list
         }
+      }
     } else {
       return {
         code: 400,

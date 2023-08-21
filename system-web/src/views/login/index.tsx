@@ -2,7 +2,7 @@
  * @Description: 登陆
  * @Author: huazj
  * @Date: 2023-04-06 20:22:48
- * @LastEditTime: 2023-04-12 15:58:05
+ * @LastEditTime: 2023-08-21 10:33:41
  * @LastEditors: huazj
  */
 import { Button, Input } from 'antd';
@@ -34,10 +34,6 @@ const Login = () => {
   const onSubmit = async () => {
     const {code, data} = await request(login, undefined, undefined);
     if(code != 0) return;
-    console.log(data);
-    // dispatch({type: 'setToken', value: 'test11111'});
-    // navigateTo('/subnav1/option1')
-    // setNotiMsg({type: 'success', message: '登陆成功'});
   }
 
   const changeAccount = (e:ChangeEvent<HTMLInputElement>) => {
