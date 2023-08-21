@@ -2,11 +2,40 @@
  * @Description: 角色管理
  * @Author: huazj
  * @Date: 2023-07-18 00:40:31
- * @LastEditTime: 2023-07-24 16:38:41
+ * @LastEditTime: 2023-08-21 10:56:59
  * @LastEditors: huazj
  */
 const db = require('../../db/mysql');
 const {createId, toCamel} = require('../../utils/common');
+
+/**
+ * @description: 列表获取数量
+ * @return {*}
+ * @param {*} ary
+ */
+const getAccountNum = (ary) => {
+  const createPromise = (item) => {
+    return new Promise(async (resolve, reject) => {
+      const {code, results} = await db.query("select count(*) as total from users_roles where role_id = ?", [item.id]);
+      if(code === 200) {
+        item.num = results[0].total;
+        resolve();
+      }
+      reject();
+    })
+  }
+  return new Promise((resolve, reject) => {
+    const promiseList = [];
+    ary.map(item => {
+      promiseList.push(createPromise(item));
+    })
+    Promise.all(promiseList).then(res => {
+      resolve(ary);
+    }).catch(e => {
+      reject(e);
+    })
+  })
+}
 
 const serves = {
   /**
@@ -19,16 +48,17 @@ const serves = {
     let total = await db.query("select count(*) as total from roles");
     let data = await db.query(
       "select * from roles where (role_name = ? or ? = '') and (role_code = ? or ? = '') limit ? , ?",
-      [roleName, roleName, roleCode, roleCode, begin, end,]
+      [roleName, roleName, roleCode, roleCode, begin, end]
     );
     if(total.code === 200 && data.code === 200) {
-        return {
-          code: 200,
-          results: {
-            total: total.results[0].total,
-            records: toCamel(data.results)
-          }
+      const list = await getAccountNum(toCamel(data.results));
+      return {
+        code: 200,
+        results: {
+          total: total.results[0].total,
+          records: list
         }
+      }
     } else {
       return {
         code: 400,

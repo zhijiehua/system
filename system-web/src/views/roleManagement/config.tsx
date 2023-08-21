@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: huazj
  * @Date: 2023-07-17 21:55:22
- * @LastEditTime: 2023-07-24 10:41:05
+ * @LastEditTime: 2023-08-21 10:58:29
  * @LastEditors: huazj
  */
 import type { ColumnsType } from 'antd/es/table';
@@ -50,7 +50,7 @@ export const getTableColumn = (callback:Function) => {
     },
     {
       title: '关联帐号数',
-      dataIndex: 'number',
+      dataIndex: 'num',
       key: 'name',
       align: 'center',
       render: text => <a>{text}</a>,
