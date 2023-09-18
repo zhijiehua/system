@@ -2,7 +2,7 @@
  * @Description: 菜单
  * @Author: huazj
  * @Date: 2023-07-19 23:38:19
- * @LastEditTime: 2023-09-13 11:35:18
+ * @LastEditTime: 2023-09-14 21:25:07
  * @LastEditors: huazj
  */
 import React, { memo, forwardRef, useEffect, useState } from 'react';
@@ -13,14 +13,15 @@ import type { RadioChangeEvent } from 'antd';
 import Notification from '@/components/Notification';
 
 import request from '@/request';
-import { addRoles, updateRoles } from '@/api/roles';
+import { addMenus, updateMenus } from '@/api/menus';
 
 type props = {
   editVisible:boolean,
   setEditVisible:Function,
-  handleSearch:Function
+  handleSearch:Function,
+  parentId:string
 }
-const EditForm = forwardRef(({editVisible, setEditVisible, handleSearch}:props, ref) => {
+const EditForm = forwardRef(({editVisible, setEditVisible, handleSearch, parentId}:props, ref) => {
 
   const [form] = Form.useForm();
   const [isEdit, setIsEdit] = useState(false);
@@ -43,16 +44,17 @@ const EditForm = forwardRef(({editVisible, setEditVisible, handleSearch}:props, 
    */  
   const handleSubmit = () => {
     const params = form.getFieldsValue(true);
-    console.log(params)
-    // form.validateFields().then(async () => {
-    //   const params = form.getFieldsValue(true);
-    //   const api = params.id? updateRoles: addRoles;
-    //   const {code, data} = await request(api, params);
-    //   if(code !== 200) return;
-    //   setNotiMsg({type: 'success', message: '操作成功'});
-    //   onClose();
-    //   handleSearch();
-    // })
+    form.validateFields().then(async () => {
+      const params = form.getFieldsValue(true);
+      params.parentId = parentId;
+      console.log(params)
+      const api = params.id? updateMenus: addMenus;
+      const {code, data} = await request(api, params);
+      if(code !== 200) return;
+      setNotiMsg({type: 'success', message: '操作成功'});
+      onClose();
+      handleSearch();
+    })
   }
 
   /**
@@ -69,13 +71,16 @@ const EditForm = forwardRef(({editVisible, setEditVisible, handleSearch}:props, 
     setTimeout(() => {
       if(form.getFieldValue('id')) setIsEdit(true);
       else setIsEdit(false);
+      const menuType = Number(form.getFieldValue('menuType') || 1);
+      setValue(menuType);
+      form.setFieldValue('menuType', menuType);
     })
   }, [editVisible])
 
   return(
     <>
       <Drawer
-        title={isEdit? '修改菜单': '新增菜单'}
+        title={`${isEdit? '修改': '新增'}${value === 1? '菜单': '按钮'}`}
         placement="right"
         onClose={onClose}
         open={editVisible}>
@@ -89,8 +94,8 @@ const EditForm = forwardRef(({editVisible, setEditVisible, handleSearch}:props, 
         >
           <Form.Item
             name='menuType'
-            label='菜单类型'>
-            <Radio.Group onChange={handleRadioChange}>
+            label='类型'>
+            <Radio.Group disabled={isEdit} onChange={handleRadioChange}>
               <Radio value={1}>菜单</Radio>
               <Radio value={2}>按钮</Radio>
             </Radio.Group>
@@ -120,7 +125,7 @@ const EditForm = forwardRef(({editVisible, setEditVisible, handleSearch}:props, 
           <Form.Item
             name='menuSort'
             label='排序'>
-              <Input disabled={isEdit} placeholder="请输入排序" />
+              <Input placeholder="请输入排序" />
           </Form.Item>
           <div className='alignCenter'>
             <Button type='primary' htmlType="submit" onClick={handleSubmit}>保 存</Button>
