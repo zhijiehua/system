@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: huazj
  * @Date: 2023-07-02 13:12:01
- * @LastEditTime: 2023-07-28 11:20:06
+ * @LastEditTime: 2024-01-05 20:15:35
  * @LastEditors: huazj
  */
 const Koa = require('koa');
@@ -17,7 +17,7 @@ const static = require('koa-static')   //静态资源服务插件
 // 配置静态资源
 const staticPath = './public/upload'
 app.use(static(
-    path.join( __dirname, staticPath)
+  path.join( __dirname, staticPath)
 ))
 
 app.use(bodyParser());

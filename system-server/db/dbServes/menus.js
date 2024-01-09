@@ -2,7 +2,7 @@
  * @Description: 菜单管理
  * @Author: huazj
  * @Date: 2023-09-14 15:26:34
- * @LastEditTime: 2023-09-14 21:54:54
+ * @LastEditTime: 2023-09-26 21:27:12
  * @LastEditors: huazj
  */
 const db = require('../../db/mysql');
@@ -15,24 +15,53 @@ const serves = {
    * @return {*}
    */  
   searchSQL: async ({menuName = '', parentId = ''}) => {
-    let data = await db.query(
-      "select * from menus where (menu_name = ? or ? = '') and parent_id = ?",
-      [menuName, menuName, parentId]
-    );
-    if(data.code === 200) {
-      return {
-        code: 200,
-        results: {
-          code: 200,
-          data: toCamel(data.results)
-        }
+    return new Promise(async (resolve, reject) => {
+      const returnData = {
+        children: []
       }
-    } else {
-      return {
-        code: 400,
-        results: data
+      const cacheObj = {};
+      const promiseList = [];
+      const resolveFun = () => {
+        Promise.all(promiseList).then(res => {
+          if(res.find(item => typeof item === 'object')) {
+            resolve({
+              code: 400,
+              results: 'SQL异常'
+            })
+          } else {
+            resolve({
+              code: 200,
+              results: returnData.children
+            })
+          }
+        })
       }
-    }
+      const getChildList = async (parent, menuName, parentId) => {
+        const createPromise = new Promise(async (resolve, reject) => {
+          let data = await db.query(
+            "select * from menus where (menu_name = ? or ? = '') and parent_id = ?",
+            [menuName, menuName, parentId]
+          );
+          if(data.code === 200) {
+            parent.children = toCamel(data.results);
+            if(parent.children.length === 0) {
+              parent.children = null;
+              resolveFun();
+            }
+            parent.children?.map((item, index) => {
+              if(item.menuType === '1') {
+                cacheObj[item.id] = item;
+                getChildList(item, menuName, item.id);
+              }
+            })
+            resolve();
+          }
+          else reject({code: 400, results: data});
+        })
+        promiseList.push(createPromise);
+      }
+      getChildList(returnData, menuName, parentId);
+    })
   },
   /**
    * @description: 添加
@@ -58,8 +87,8 @@ const serves = {
       findData = results;
     }
     if(findData.length !== 0) {
-      return {code: 400, results: menuType === 1? '菜单名称不能重复': '按钮权限标识不能重复'}
-    } 
+      return {code: 400, results: menuType === 1? '菜单路径不能重复': '按钮权限标识不能重复'}
+    }
     const data = await db.query(`INSERT INTO menus (id, menu_type, menu_name, menu_path, menu_root, menu_sort, parent_id)
     VALUES (?, ?, ?, ?, ?, ?, ?)`, [createId(), menuType, menuName, menuPath, menuRoot, menuSort, parentId]);
     return data
@@ -84,6 +113,13 @@ const serves = {
    */  
   deleteSQL: async (params) => {
     const {id} = params;
+    const search = await db.query('select from menus where parent_id = ?', [id]);
+    if(search) {
+      return {
+        code: 400,
+        results: '该菜单下还有子级'
+      }
+    }
     const data = await db.query(`delete from menus where id = ?`, [id]);
     return data;
   }

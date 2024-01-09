@@ -2,7 +2,7 @@
  * @Description: 菜单管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-09-14 21:50:08
+ * @LastEditTime: 2024-01-05 20:19:01
  * @LastEditors: huazj
  */
 import React, {useEffect, useState, useCallback, useRef} from 'react';
@@ -72,10 +72,12 @@ const MenuManagement: React.FC =  () => {
    * @param {any} values
    */  
   const handleSearch = useCallback(async () => {
+    console.log(111)
     currentShowApp = form.getFieldValue('parentId');
-    const {code, data:{data}} = await request(getMenuList, {
+    const {code, data} = await request(getMenuList, {
       ...form.getFieldsValue()
     })
+    console.log(data)
     if(code !== 200) return;
     setTableData(data);
   }, [])
@@ -88,6 +90,7 @@ const MenuManagement: React.FC =  () => {
     const {code, data:{records}} = await request(getAppList, {current: 1, size: 100});
     if(code !== 200) return;
     setAppList(records);
+    console.log(records, 11)
     if(records.length > 0) {
       form.setFieldValue('parentId', records[0].id);
       handleSearch();
