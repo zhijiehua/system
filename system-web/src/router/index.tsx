@@ -2,7 +2,7 @@
  * @Description: 路由
  * @Author: huazj
  * @Date: 2023-03-26 10:23:21
- * @LastEditTime: 2024-01-05 20:29:41
+ * @LastEditTime: 2024-04-15 23:04:29
  * @LastEditors: huazj
  */
 
@@ -18,6 +18,7 @@ const DictManagement = lazy(() => import('@/views/dictManagement'));
 const AccountManagement = lazy(() => import('@/views/accountManagement'));
 const AppManagement = lazy(() => import('@/views/appManagement'));
 const TestHooksApi = lazy(() => import('@/views/testHooksApi'));
+const Home = lazy(() => import('@/views/home'));
 const Page404 = lazy(() => import('@/views/404'))
 
 const withLoadingComponent = (comp:JSX.Element) => (
@@ -36,6 +37,10 @@ const routes = [
   {
     path: '/login',
     element: <Login></Login>
+  },
+  {
+    path: '/home',
+    element: <Home></Home>
   },
   {
     path: '/system',

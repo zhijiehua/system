@@ -2,9 +2,11 @@
  * @Description: 
  * @Author: huazj
  * @Date: 2023-07-02 13:12:01
- * @LastEditTime: 2024-01-05 20:15:35
+ * @LastEditTime: 2024-04-12 23:32:58
  * @LastEditors: huazj
  */
+const createExcel = require('./exportDay/exportExcel.js');
+createExcel();
 const Koa = require('koa');
 const app = new Koa();
 const path = require('path');

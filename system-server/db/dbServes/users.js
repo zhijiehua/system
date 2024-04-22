@@ -2,7 +2,7 @@
  * @Description: 调用用户信息数据库
  * @Author: huazj
  * @Date: 2023-07-17 00:33:58
- * @LastEditTime: 2023-08-18 11:15:27
+ * @LastEditTime: 2024-04-15 21:25:29
  * @LastEditors: huazj
  */
 const db = require('../../db/mysql');
@@ -49,7 +49,7 @@ const serves = {
     let total = await db.query("select count(*) as total from users");
     // 获取列表数据
     let data = await db.query(
-      "select id, user_id, user_name, status, phone, email from users where (user_name = ? or ? = '') and (user_id = ? or ? = '') limit ? , ?",
+      "select last_login, id, user_id, user_name, status, phone, email from users where (user_name = ? or ? = '') and (user_id = ? or ? = '') limit ? , ?",
       [userName, userName, userId, userId, begin, end,]
     );
     if(total.code === 200 && data.code === 200) {

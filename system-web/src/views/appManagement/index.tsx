@@ -2,7 +2,7 @@
  * @Description: 应用管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-28 15:33:40
+ * @LastEditTime: 2024-04-12 20:41:10
  * @LastEditors: huazj
  */
 import { useCallback, useRef, useState, useEffect } from 'react';
@@ -37,6 +37,7 @@ const AppManagement: React.FC =  () => {
     const {code, data:{total, records}} = await request(getAppList, {
       current: pagesInfo.current,
       size: pagesInfo.size,
+      // test: [1, 2, 3],
       ...form.getFieldsValue()
     })
     if(code !== 200) return;

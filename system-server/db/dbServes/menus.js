@@ -2,11 +2,10 @@
  * @Description: 菜单管理
  * @Author: huazj
  * @Date: 2023-09-14 15:26:34
- * @LastEditTime: 2023-09-26 21:27:12
+ * @LastEditTime: 2024-04-12 20:59:09
  * @LastEditors: huazj
  */
 const db = require('../../db/mysql');
-const { params } = require('../../routes/modules/menus');
 const {createId, toCamel} = require('../../utils/common');
 
 const serves = {
@@ -91,6 +90,7 @@ const serves = {
     }
     const data = await db.query(`INSERT INTO menus (id, menu_type, menu_name, menu_path, menu_root, menu_sort, parent_id)
     VALUES (?, ?, ?, ?, ?, ?, ?)`, [createId(), menuType, menuName, menuPath, menuRoot, menuSort, parentId]);
+    console.log(data)
     return data
   },
   /**
@@ -113,8 +113,9 @@ const serves = {
    */  
   deleteSQL: async (params) => {
     const {id} = params;
-    const search = await db.query('select from menus where parent_id = ?', [id]);
-    if(search) {
+    const {code, results} = await db.query('select * from menus where parent_id = ?', [id]);
+    console.log(code, results)
+    if(code === 200 && results.length) {
       return {
         code: 400,
         results: '该菜单下还有子级'

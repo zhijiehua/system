@@ -2,7 +2,7 @@
  * @Description: 字典管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2023-07-27 15:09:18
+ * @LastEditTime: 2024-04-16 21:39:50
  * @LastEditors: huazj
  */
 import React, {useEffect, useState, useCallback, useRef} from 'react';
@@ -14,6 +14,7 @@ import Pagination from '@/components/pagination';
 import ModalConfirm from '@/components/ModalConfirm';
 import Notification from '@/components/Notification';
 import EditForm from './EditForm';
+import SetRole from './SetRole';
 
 import { getTableColumn, DataType } from './config';
 import { getRolesList, deleRoles } from '@/api/roles';
@@ -167,6 +168,8 @@ const RoleManagement: React.FC =  () => {
         handleBtn={deleteFun}/>
       {/* 消息提示框 */}
       <Notification notiMsg={notiMsg}/>
+
+      <SetRole />
     </div>
   )
 }

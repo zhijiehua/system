@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: huazj
  * @Date: 2023-03-30 20:22:01
- * @LastEditTime: 2024-01-05 20:28:16
+ * @LastEditTime: 2024-04-12 20:42:46
  * @LastEditors: huazj
  */
 import React from 'react';
@@ -52,17 +52,9 @@ const routerJson:MenuProps['items'] = [
       {
         key: '/system/appManagement',
         label: '应用管理'
-      },
-      {
-        key: '/system/testHooksApi',
-        label: '测试hooks用'
-      },
+      }
     ]
-  },
-  // {
-  //   key: 'sub',
-  //   label: '角色管理'
-  // }
+  }
 ]
 
 export default routerJson;

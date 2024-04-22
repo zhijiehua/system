@@ -2,7 +2,7 @@
  * @Description: 菜单管理
  * @Author: huazj
  * @Date: 2023-07-17 21:21:38
- * @LastEditTime: 2024-01-05 20:19:01
+ * @LastEditTime: 2024-04-12 20:51:57
  * @LastEditors: huazj
  */
 import React, {useEffect, useState, useCallback, useRef} from 'react';
@@ -57,7 +57,7 @@ const MenuManagement: React.FC =  () => {
         })
         break;
       case 'add':
-        setParentId(data.parentId);
+        setParentId(data.id);
         setEditVisible(true);
         setTimeout(() => {
           editFormRef.current?.resetFields();
@@ -72,7 +72,6 @@ const MenuManagement: React.FC =  () => {
    * @param {any} values
    */  
   const handleSearch = useCallback(async () => {
-    console.log(111)
     currentShowApp = form.getFieldValue('parentId');
     const {code, data} = await request(getMenuList, {
       ...form.getFieldsValue()

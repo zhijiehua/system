@@ -2,7 +2,7 @@
  * @Description: 菜单
  * @Author: huazj
  * @Date: 2023-07-02 15:51:09
- * @LastEditTime: 2023-09-14 21:54:15
+ * @LastEditTime: 2024-04-12 21:08:52
  * @LastEditors: huazj
  */
 const Router = require('koa-router');
@@ -22,7 +22,7 @@ router.post('/getList', async (ctx, next) => {
 router.put('/addMenus', async (ctx, next) => {
   const params = ctx.request.body;
   const dbData = await addSQL(params);
-  tx.dbData = {...dbData, results: dbData.code === 200? null: dbData.results};
+  ctx.dbData = {...dbData, results: dbData.code === 200? null: dbData.results};
   next();
 })
 
@@ -30,7 +30,8 @@ router.put('/addMenus', async (ctx, next) => {
 router.put('/updateMenus', async (ctx, next) => {
   const params = ctx.request.body;
   const dbData = await updateSql(params);
-  tx.dbData = {...dbData, results: dbData.code === 200? null: dbData.results};
+  console.log(dbData)
+  ctx.dbData = {...dbData, results: dbData.code === 200? null: dbData.results};
   next();
 })
 

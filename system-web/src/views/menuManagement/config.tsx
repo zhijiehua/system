@@ -2,7 +2,7 @@
  * @Description: 菜单编辑
  * @Author: huazj
  * @Date: 2023-09-13 09:39:33
- * @LastEditTime: 2023-09-14 20:24:37
+ * @LastEditTime: 2024-04-15 21:29:13
  * @LastEditors: huazj
  */
 import type { ColumnsType } from 'antd/es/table';
@@ -41,7 +41,7 @@ export const getTableColumn = (callback:Function) => {
       dataIndex: 'menuType',
       key: 'name',
       align: 'center',
-      render: text => <a>{text}</a>,
+      render: text => <a>{text === '1'? '菜单': '按钮'}</a>,
     },
     {
       title: '前端路径',
