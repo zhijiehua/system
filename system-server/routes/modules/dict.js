@@ -2,13 +2,13 @@
  * @Description: 
  * @Author: huazj
  * @Date: 2023-07-24 16:27:43
- * @LastEditTime: 2023-07-29 17:39:16
+ * @LastEditTime: 2024-08-24 17:12:44
  * @LastEditors: huazj
  */
 const Router = require('koa-router');
 const router = new Router();
 
-const { searchSQL, addSQL, updateSQL, updateStatus, deleteSQL, addItemSQL, updateItemSQL, getDictItemSQL, deleDictItemSQL} = require('../../db/dbServes/dict');
+const { searchSQL, addSQL, updateSQL, updateStatus, deleteSQL, addItemSQL, updateItemSQL, getDictItemSQL, deleDictItemSQL } = require('../../db/dbServes/dict');
 
 // 获取列表
 router.post('/getList', async (ctx, next) => {
@@ -30,7 +30,7 @@ router.put('/addDicts', async (ctx, next) => {
 router.put('/updateDicts', async (ctx, next) => {
   const params = ctx.request.body;
   const dbData = await updateSQL(params);
-  ctx.dbData = {...dbData, results: dbData.code === 200? null: dbData.results};
+  ctx.dbData = { ...dbData, results: dbData.code === 200 ? null : dbData.results };
   next()
 })
 
@@ -38,7 +38,7 @@ router.put('/updateDicts', async (ctx, next) => {
 router.put('/updateStatus', async (ctx, next) => {
   const params = ctx.request.body;
   const dbData = await updateStatus(params);
-  ctx.dbData = {...dbData, results: dbData.code === 200? null: dbData.results};
+  ctx.dbData = { ...dbData, results: dbData.code === 200 ? null : dbData.results };
   next()
 })
 
@@ -46,7 +46,7 @@ router.put('/updateStatus', async (ctx, next) => {
 router.delete('/deleDicts', async (ctx, next) => {
   const params = ctx.query;
   const dbData = await deleteSQL(params);
-  ctx.dbData = {...dbData, results: dbData.code === 200? null: dbData.results};
+  ctx.dbData = { ...dbData, results: dbData.code === 200 ? null : dbData.results };
   next()
 })
 
@@ -54,7 +54,7 @@ router.delete('/deleDicts', async (ctx, next) => {
 router.put('/addDictItems', async (ctx, next) => {
   const params = ctx.request.body;
   const dbData = await addItemSQL(params);
-  ctx.dbData = {...dbData, results: dbData.code === 200? null: dbData.results};
+  ctx.dbData = { ...dbData, results: dbData.code === 200 ? null : dbData.results };
   next()
 })
 
@@ -62,7 +62,7 @@ router.put('/addDictItems', async (ctx, next) => {
 router.put('/updateDictItems', async (ctx, next) => {
   const params = ctx.request.body;
   const dbData = await updateItemSQL(params);
-  ctx.dbData = {...dbData, results: dbData.code === 200? null: dbData.results};
+  ctx.dbData = { ...dbData, results: dbData.code === 200 ? null : dbData.results };
   next()
 })
 
@@ -70,7 +70,10 @@ router.put('/updateDictItems', async (ctx, next) => {
 router.get('/getDictItems', async (ctx, next) => {
   const params = ctx.query;
   const dbData = await getDictItemSQL(params);
-  ctx.dbData = dbData;
+  ctx.dbData = {
+    code: 200,
+    results: ['1', '2', '3']
+  };
   next()
 })
 
@@ -78,7 +81,7 @@ router.get('/getDictItems', async (ctx, next) => {
 router.delete('/deleDictItems', async (ctx, next) => {
   const params = ctx.query;
   const dbData = await deleDictItemSQL(params);
-  ctx.dbData = {...dbData, results: dbData.code === 200? null: dbData.results};
+  ctx.dbData = { ...dbData, results: dbData.code === 200 ? null : dbData.results };
   next()
 })
 

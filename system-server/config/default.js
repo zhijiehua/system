@@ -2,7 +2,7 @@
  * @Description: 数据库配置
  * @Author: huazj
  * @Date: 2023-07-05 11:44:23
- * @LastEditTime: 2023-07-05 15:26:12
+ * @LastEditTime: 2024-04-22 11:18:37
  * @LastEditors: huazj
  */
 const database = {
